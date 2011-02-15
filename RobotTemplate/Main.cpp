@@ -2,7 +2,7 @@
 #include "UserCode.h"
 #include "FRCCommunication.h"
 #include "UserConstants.h"
-const int ledPin = 13;
+
 //const int interval = 250; //Milliseconds
 
 int main() {
@@ -25,7 +25,7 @@ void setup() {
 	//to send diagnostic information in this project.
 	Serial.begin(9600);
 	//Configure ledPin as an output
-	pinMode(ledPin, OUTPUT);
+
 	communication.init(TEAM_NUMBER);
 	userInit();
 

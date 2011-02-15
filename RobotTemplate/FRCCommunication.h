@@ -6,12 +6,16 @@
  */
 #include "CommandData.h"
 #include "StatusData.h"
+#include "RobotStatusLight.h"
 
 #ifndef FRCCOMMUNICATION_H_
 #define FRCCOMMUNICATION_H_
 
 const int STATUS_PACKET_PORT = 1150;
 const int COMMAND_PACKET_PORT = 1140;
+
+const int PACKET_LOSS_TIMEOUT = 1000;
+
 struct FRCCommunication{
 public:
 	unsigned char mac[6];
@@ -27,6 +31,9 @@ public:
 	bool isEStoped;
 	CommandData commandData;
 	StatusData statusData;
+	RobotStatusLight rsl;
+	unsigned long lastPacketReceivedTime;
+
 	unsigned char commandBytes[COMMAND_PACKET_SIZE];
 	unsigned char statusBytes[STATUS_PACKET_SIZE];
 };

@@ -25,6 +25,7 @@ unsigned int remotePort; // holds received packet's originating port
 // buffers for receiving and sending data
 
 void FRCCommunication::init(short teamNumber) {
+	rsl.init(13);
 	byte ip[] = {ROBOT_NETWORK, teamNumber / 100, teamNumber % 100, ROBOT_IP};
 	Ethernet.begin(MAC, ip, GATEWAY, SUBNET);
 	Udp.begin(COMMAND_PACKET_PORT);
@@ -41,18 +42,6 @@ void FRCCommunication::init(short teamNumber) {
 	Serial.println("Communication init complete.");
 }
 
-/*
-Solid ON = Autonomous Enabled
-
-Solid ON, but blinks OFF every 1.5s = Teleoperated Enabled
-
-Slow Blink (900ms on/ 900ms off) = System Disabled; caused by system watchdog, user watchdog or Driver's Station set to disabled
-
-Fast-Slow Blink (200ms on/900ms off) = Low Battery (<12V) or no user code AND system disabled either by system watchdog, user watchdog, or Driver;s station set to disabled
-
-Fast Blink (200ms on/200ms off) = System error: No driver's station communication, bad cRIO Image, bad team ID, extensive comm. error
- */
-
 int counter;
 bool FRCCommunication::newDataReady() {
 	int packetSize = Udp.available(); // note that this includes the UDP header
@@ -62,6 +51,8 @@ bool FRCCommunication::newDataReady() {
 
 		// read the packet into packetBufffer and get the senders IP addr and port number
 		Udp.readPacket((char *)commandBytes, COMMAND_PACKET_SIZE, remoteIp, remotePort);
+
+		lastPacketReceivedTime = millis();
 
 		commandData.parse(commandBytes);
 
@@ -101,6 +92,15 @@ bool FRCCommunication::newDataReady() {
 	else{
 
 	}
+
+	unsigned long now = millis();
+	if (lastPacketReceivedTime + PACKET_LOSS_TIMEOUT < now){ //No Comms
+		isConnected = false;
+		commandData.mode.setEnabled(false);
+	}
+
+	rsl.update(isConnected, statusData.mode);
+
 	return false;
 }
 
