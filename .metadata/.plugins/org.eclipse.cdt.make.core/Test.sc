@@ -4,6 +4,10 @@
 <scannerInfo id="org.eclipse.cdt.make.core.discoveredScannerInfo">
 <instance id="de.innot.avreclipse.configuration.app.debug.1802874557;de.innot.avreclipse.configuration.app.debug.1802874557.">
 <collector id="org.eclipse.cdt.make.core.PerProjectSICollector">
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:/winavr-20081205/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>
@@ -145,6 +149,10 @@
 </instance>
 <instance id="de.innot.avreclipse.configuration.app.debug.1802874557;de.innot.avreclipse.configuration.app.debug.1802874557.;de.innot.avreclipse.tool.cppcompiler.app.debug.665543691;de.innot.avreclipse.cppcompiler.input.1296146494">
 <collector id="org.eclipse.cdt.make.core.PerProjectSICollector">
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:/winavr-20081205/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>
@@ -528,6 +536,10 @@
 </instance>
 <instance id="de.innot.avreclipse.configuration.app.debug.1802874557;de.innot.avreclipse.configuration.app.debug.1802874557.;de.innot.avreclipse.tool.compiler.winavr.app.debug.1320973655;de.innot.avreclipse.compiler.winavr.input.1739497304">
 <collector id="org.eclipse.cdt.make.core.PerProjectSICollector">
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:\winavr-20100110\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>
+<includePath path="c:/winavr-20100110/lib/gcc/../../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include"/>
 <includePath path="c:\winavr-20081205\bin\../lib/gcc/avr/4.3.2/include-fixed"/>
 <includePath path="c:/winavr-20081205/lib/gcc/../../lib/gcc/avr/4.3.2/include"/>

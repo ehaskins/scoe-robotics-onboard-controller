@@ -61,7 +61,7 @@ all: Test.elf secondary-outputs
 Test.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C++ Linker'
-	avr-g++ --cref -s -Os -o"Test.elf" $(OBJS) $(USER_OBJS) $(LIBS) -lm -Wl,-Map,Test.map,--cref -L"C:\Users\ehaskins\Code\Next Robots\workspace\Arduino\Debug" -mmcu=atmega2560
+	avr-g++ --cref -s -Os -o"Test.elf" $(OBJS) $(USER_OBJS) $(LIBS) -lm -Wl,-Map,Test.map,--cref -L"C:\Users\ehaskins.EHNET\Code Local\Next Robots\workspace\Arduino\Debug" -mmcu=atmega2560
 	@echo 'Finished building target: $@'
 	@echo ' '
 

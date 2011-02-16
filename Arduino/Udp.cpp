@@ -69,8 +69,11 @@ int UdpClass::available() {
 /* returns number of bytes read, or negative number of bytes we would have needed if we truncated */
 int UdpClass::readPacket(uint8_t * buf, uint16_t bufLen, uint8_t *ip, uint16_t *port) {
   int packetLen = available()-8; //skip UDP header;
+
   if(packetLen < 0 ) return 0; // no real data here	
+
   if(packetLen > (int)bufLen) {
+
     //packet is too large - truncate
     //HACK - hand-parse the UDP packet using TCP recv method
     uint8_t tmpBuf[8];
@@ -90,10 +93,11 @@ int UdpClass::readPacket(uint8_t * buf, uint16_t bufLen, uint8_t *ip, uint16_t *
       buf[i]=tmpBuf[0];
     }
 
-    //and just read the rest byte by byte and throw it away
+    /*//and just read the rest byte by byte and throw it away
     while(available()) {
       recv(_sock,tmpBuf,1);
     }
+     */
 
     return (-1*packetLen);
 

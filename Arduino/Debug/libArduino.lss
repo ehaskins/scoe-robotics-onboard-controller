@@ -3691,17 +3691,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
   4 .text._ZN8UdpClass9availableEv 0000000e  00000000  00000000  0000006e  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  5 .text._ZN8UdpClass10readPacketEPhjS0_Pj 0000013e  00000000  00000000  0000007c  2**0
+  5 .text._ZN8UdpClass10readPacketEPhjS0_Pj 0000011a  00000000  00000000  0000007c  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  6 .text._ZN8UdpClass10readPacketEPcjPhRj 0000003c  00000000  00000000  000001ba  2**0
+  6 .text._ZN8UdpClass10readPacketEPcjPhRj 0000003c  00000000  00000000  00000196  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  7 .text._ZN8UdpClass10sendPacketEPKcPhj 00000032  00000000  00000000  000001f6  2**0
+  7 .text._ZN8UdpClass10sendPacketEPKcPhj 00000032  00000000  00000000  000001d2  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  8 .text._ZN8UdpClass10sendPacketEPhjS0_j 00000012  00000000  00000000  00000228  2**0
+  8 .text._ZN8UdpClass10sendPacketEPhjS0_j 00000012  00000000  00000000  00000204  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
-  9 .text._ZN8UdpClass5beginEj 00000016  00000000  00000000  0000023a  2**0
+  9 .text._ZN8UdpClass5beginEj 00000016  00000000  00000000  00000216  2**0
                   CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE
- 10 .bss.Udp      00000003  00000000  00000000  00000250  2**0
+ 10 .bss.Udp      00000003  00000000  00000000  0000022c  2**0
                   ALLOC
 
 Disassembly of section .text._ZN8UdpClass10readPacketEPhj:
@@ -3797,111 +3797,95 @@ Disassembly of section .text._ZN8UdpClass10readPacketEPhjS0_Pj:
   5c:	d6 2c       	mov	r13, r6
   5e:	c8 14       	cp	r12, r8
   60:	d9 04       	cpc	r13, r9
-  62:	04 f0       	brlt	.+0      	; 0x64 <_ZN8UdpClass10readPacketEPhjS0_Pj+0x64>
-  64:	00 c0       	rjmp	.+0      	; 0x66 <_ZN8UdpClass10readPacketEPhjS0_Pj+0x66>
-  66:	f5 01       	movw	r30, r10
-  68:	80 81       	ld	r24, Z
-  6a:	8e 01       	movw	r16, r28
-  6c:	0f 5f       	subi	r16, 0xFF	; 255
-  6e:	1f 4f       	sbci	r17, 0xFF	; 255
-  70:	b8 01       	movw	r22, r16
-  72:	48 e0       	ldi	r20, 0x08	; 8
-  74:	50 e0       	ldi	r21, 0x00	; 0
-  76:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
-  7a:	89 81       	ldd	r24, Y+1	; 0x01
-  7c:	f7 01       	movw	r30, r14
-  7e:	80 83       	st	Z, r24
-  80:	8a 81       	ldd	r24, Y+2	; 0x02
-  82:	81 83       	std	Z+1, r24	; 0x01
-  84:	8b 81       	ldd	r24, Y+3	; 0x03
-  86:	82 83       	std	Z+2, r24	; 0x02
-  88:	8c 81       	ldd	r24, Y+4	; 0x04
-  8a:	83 83       	std	Z+3, r24	; 0x03
-  8c:	9d 81       	ldd	r25, Y+5	; 0x05
-  8e:	80 e0       	ldi	r24, 0x00	; 0
-  90:	2e 81       	ldd	r18, Y+6	; 0x06
-  92:	82 0f       	add	r24, r18
-  94:	91 1d       	adc	r25, r1
-  96:	f2 01       	movw	r30, r4
-  98:	91 83       	std	Z+1, r25	; 0x01
-  9a:	80 83       	st	Z, r24
-  9c:	ee 24       	eor	r14, r14
-  9e:	ff 24       	eor	r15, r15
-  a0:	70 2e       	mov	r7, r16
-  a2:	01 2f       	mov	r16, r17
-  a4:	00 c0       	rjmp	.+0      	; 0xa6 <_ZN8UdpClass10readPacketEPhjS0_Pj+0xa6>
-  a6:	f5 01       	movw	r30, r10
-  a8:	80 81       	ld	r24, Z
-  aa:	67 2d       	mov	r22, r7
-  ac:	70 2f       	mov	r23, r16
-  ae:	41 e0       	ldi	r20, 0x01	; 1
-  b0:	50 e0       	ldi	r21, 0x00	; 0
-  b2:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
-  b6:	f1 01       	movw	r30, r2
-  b8:	ee 0d       	add	r30, r14
-  ba:	ff 1d       	adc	r31, r15
-  bc:	89 81       	ldd	r24, Y+1	; 0x01
-  be:	80 83       	st	Z, r24
-  c0:	08 94       	sec
-  c2:	e1 1c       	adc	r14, r1
-  c4:	f1 1c       	adc	r15, r1
-  c6:	ec 14       	cp	r14, r12
-  c8:	fd 04       	cpc	r15, r13
-  ca:	04 f0       	brlt	.+0      	; 0xcc <_ZN8UdpClass10readPacketEPhjS0_Pj+0xcc>
-  cc:	00 c0       	rjmp	.+0      	; 0xce <_ZN8UdpClass10readPacketEPhjS0_Pj+0xce>
-  ce:	f5 01       	movw	r30, r10
-  d0:	80 81       	ld	r24, Z
-  d2:	b8 01       	movw	r22, r16
-  d4:	41 e0       	ldi	r20, 0x01	; 1
-  d6:	50 e0       	ldi	r21, 0x00	; 0
-  d8:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
-  dc:	00 c0       	rjmp	.+0      	; 0xde <_ZN8UdpClass10readPacketEPhjS0_Pj+0xde>
-  de:	8e 01       	movw	r16, r28
-  e0:	0f 5f       	subi	r16, 0xFF	; 255
-  e2:	1f 4f       	sbci	r17, 0xFF	; 255
-  e4:	c5 01       	movw	r24, r10
-  e6:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
-  ea:	89 2b       	or	r24, r25
-  ec:	01 f4       	brne	.+0      	; 0xee <_ZN8UdpClass10readPacketEPhjS0_Pj+0xee>
-  ee:	22 27       	eor	r18, r18
-  f0:	33 27       	eor	r19, r19
-  f2:	28 19       	sub	r18, r8
-  f4:	39 09       	sbc	r19, r9
-  f6:	00 c0       	rjmp	.+0      	; 0xf8 <_ZN8UdpClass10readPacketEPhjS0_Pj+0xf8>
-  f8:	f5 01       	movw	r30, r10
-  fa:	80 81       	ld	r24, Z
-  fc:	b1 01       	movw	r22, r2
-  fe:	47 2d       	mov	r20, r7
- 100:	56 2d       	mov	r21, r6
- 102:	97 01       	movw	r18, r14
- 104:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
- 108:	9c 01       	movw	r18, r24
- 10a:	c9 01       	movw	r24, r18
- 10c:	28 96       	adiw	r28, 0x08	; 8
- 10e:	0f b6       	in	r0, 0x3f	; 63
- 110:	f8 94       	cli
- 112:	de bf       	out	0x3e, r29	; 62
- 114:	0f be       	out	0x3f, r0	; 63
- 116:	cd bf       	out	0x3d, r28	; 61
- 118:	cf 91       	pop	r28
- 11a:	df 91       	pop	r29
- 11c:	1f 91       	pop	r17
- 11e:	0f 91       	pop	r16
- 120:	ff 90       	pop	r15
- 122:	ef 90       	pop	r14
- 124:	df 90       	pop	r13
- 126:	cf 90       	pop	r12
- 128:	bf 90       	pop	r11
- 12a:	af 90       	pop	r10
- 12c:	9f 90       	pop	r9
- 12e:	8f 90       	pop	r8
- 130:	7f 90       	pop	r7
- 132:	6f 90       	pop	r6
- 134:	5f 90       	pop	r5
- 136:	4f 90       	pop	r4
- 138:	3f 90       	pop	r3
- 13a:	2f 90       	pop	r2
- 13c:	08 95       	ret
+  62:	04 f4       	brge	.+0      	; 0x64 <_ZN8UdpClass10readPacketEPhjS0_Pj+0x64>
+  64:	f5 01       	movw	r30, r10
+  66:	80 81       	ld	r24, Z
+  68:	8e 01       	movw	r16, r28
+  6a:	0f 5f       	subi	r16, 0xFF	; 255
+  6c:	1f 4f       	sbci	r17, 0xFF	; 255
+  6e:	b8 01       	movw	r22, r16
+  70:	48 e0       	ldi	r20, 0x08	; 8
+  72:	50 e0       	ldi	r21, 0x00	; 0
+  74:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
+  78:	89 81       	ldd	r24, Y+1	; 0x01
+  7a:	f7 01       	movw	r30, r14
+  7c:	80 83       	st	Z, r24
+  7e:	8a 81       	ldd	r24, Y+2	; 0x02
+  80:	81 83       	std	Z+1, r24	; 0x01
+  82:	8b 81       	ldd	r24, Y+3	; 0x03
+  84:	82 83       	std	Z+2, r24	; 0x02
+  86:	8c 81       	ldd	r24, Y+4	; 0x04
+  88:	83 83       	std	Z+3, r24	; 0x03
+  8a:	9d 81       	ldd	r25, Y+5	; 0x05
+  8c:	80 e0       	ldi	r24, 0x00	; 0
+  8e:	2e 81       	ldd	r18, Y+6	; 0x06
+  90:	82 0f       	add	r24, r18
+  92:	91 1d       	adc	r25, r1
+  94:	f2 01       	movw	r30, r4
+  96:	91 83       	std	Z+1, r25	; 0x01
+  98:	80 83       	st	Z, r24
+  9a:	ee 24       	eor	r14, r14
+  9c:	ff 24       	eor	r15, r15
+  9e:	70 2e       	mov	r7, r16
+  a0:	01 2f       	mov	r16, r17
+  a2:	00 c0       	rjmp	.+0      	; 0xa4 <_ZN8UdpClass10readPacketEPhjS0_Pj+0xa4>
+  a4:	f5 01       	movw	r30, r10
+  a6:	80 81       	ld	r24, Z
+  a8:	67 2d       	mov	r22, r7
+  aa:	70 2f       	mov	r23, r16
+  ac:	41 e0       	ldi	r20, 0x01	; 1
+  ae:	50 e0       	ldi	r21, 0x00	; 0
+  b0:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
+  b4:	f1 01       	movw	r30, r2
+  b6:	ee 0d       	add	r30, r14
+  b8:	ff 1d       	adc	r31, r15
+  ba:	89 81       	ldd	r24, Y+1	; 0x01
+  bc:	80 83       	st	Z, r24
+  be:	08 94       	sec
+  c0:	e1 1c       	adc	r14, r1
+  c2:	f1 1c       	adc	r15, r1
+  c4:	ec 14       	cp	r14, r12
+  c6:	fd 04       	cpc	r15, r13
+  c8:	04 f0       	brlt	.+0      	; 0xca <_ZN8UdpClass10readPacketEPhjS0_Pj+0xca>
+  ca:	22 27       	eor	r18, r18
+  cc:	33 27       	eor	r19, r19
+  ce:	28 19       	sub	r18, r8
+  d0:	39 09       	sbc	r19, r9
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <_ZN8UdpClass10readPacketEPhjS0_Pj+0xd4>
+  d4:	f5 01       	movw	r30, r10
+  d6:	80 81       	ld	r24, Z
+  d8:	b1 01       	movw	r22, r2
+  da:	47 2d       	mov	r20, r7
+  dc:	56 2d       	mov	r21, r6
+  de:	97 01       	movw	r18, r14
+  e0:	0e 94 00 00 	call	0	; 0x0 <_ZN8UdpClass10readPacketEPhjS0_Pj>
+  e4:	9c 01       	movw	r18, r24
+  e6:	c9 01       	movw	r24, r18
+  e8:	28 96       	adiw	r28, 0x08	; 8
+  ea:	0f b6       	in	r0, 0x3f	; 63
+  ec:	f8 94       	cli
+  ee:	de bf       	out	0x3e, r29	; 62
+  f0:	0f be       	out	0x3f, r0	; 63
+  f2:	cd bf       	out	0x3d, r28	; 61
+  f4:	cf 91       	pop	r28
+  f6:	df 91       	pop	r29
+  f8:	1f 91       	pop	r17
+  fa:	0f 91       	pop	r16
+  fc:	ff 90       	pop	r15
+  fe:	ef 90       	pop	r14
+ 100:	df 90       	pop	r13
+ 102:	cf 90       	pop	r12
+ 104:	bf 90       	pop	r11
+ 106:	af 90       	pop	r10
+ 108:	9f 90       	pop	r9
+ 10a:	8f 90       	pop	r8
+ 10c:	7f 90       	pop	r7
+ 10e:	6f 90       	pop	r6
+ 110:	5f 90       	pop	r5
+ 112:	4f 90       	pop	r4
+ 114:	3f 90       	pop	r3
+ 116:	2f 90       	pop	r2
+ 118:	08 95       	ret
 
 Disassembly of section .text._ZN8UdpClass10readPacketEPcjPhRj:
 

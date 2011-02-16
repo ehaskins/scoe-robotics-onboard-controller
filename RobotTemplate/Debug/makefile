@@ -61,7 +61,7 @@ all: RobotTemplate.elf secondary-outputs
 RobotTemplate.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C++ Linker'
-	avr-g++ --cref -s -Os -o"RobotTemplate.elf" $(OBJS) $(USER_OBJS) $(LIBS) -lm -Wl,-Map,RobotTemplate.map,--cref -ffunction-sections -fdata-sections -Wl,--gc-sections -L"C:\Users\ehaskins.EHNET\Code\Next Robots\workspace\Arduino\Debug" -mmcu=atmega2560
+	avr-g++ --cref -s -Os -o"RobotTemplate.elf" $(OBJS) $(USER_OBJS) $(LIBS) -lm -Wl,-Map,RobotTemplate.map,--cref -ffunction-sections -fdata-sections -Wl,--gc-sections -L"C:\Users\ehaskins.EHNET\Code Local\Next Robots\workspace\Arduino\Debug" -mmcu=atmega2560
 	@echo 'Finished building target: $@'
 	@echo ' '
 

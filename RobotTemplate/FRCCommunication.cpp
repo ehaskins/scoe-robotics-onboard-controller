@@ -45,17 +45,14 @@ void FRCCommunication::init(short teamNumber) {
 int counter;
 bool FRCCommunication::newDataReady() {
 	int packetSize = Udp.available(); // note that this includes the UDP header
-
 	packetSize -= 8; //subtract the 8 byte header;
 	if (packetSize == COMMAND_PACKET_SIZE) {
-
 		// read the packet into packetBufffer and get the senders IP addr and port number
 		Udp.readPacket((char *)commandBytes, COMMAND_PACKET_SIZE, remoteIp, remotePort);
 
 		lastPacketReceivedTime = millis();
 
 		commandData.parse(commandBytes);
-
 		/*if (counter % 10 == 0) {
 			Serial.print("COMMAND: Packet ID:");
 			Serial.print(commandData.packetId);
@@ -85,7 +82,8 @@ bool FRCCommunication::newDataReady() {
 	}
 	else if (packetSize > 0){
 		char garbage[2048];
-		Udp.readPacket(garbage, 2048, remoteIp, remotePort);
+		packetSize = packetSize <= 2048 ? packetSize : 2048;
+		Udp.readPacket(garbage, packetSize, remoteIp, remotePort);
 		Serial.print("PacketSize:");
 		Serial.println(packetSize);
 	}
