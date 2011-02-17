@@ -32,7 +32,7 @@ unsigned short readUInt16(unsigned char data[], int *offset){
 	return out;
 }
 unsigned int readUInt32(unsigned char data[], int *offset){
-	unsigned short out =
+	unsigned int out =
 			((unsigned int)(data[*offset]) << 24) +
 			((unsigned int)(data[*offset + 1]) << 16) +
 			((unsigned int)(data[*offset + 2]) << 8) +
@@ -45,7 +45,7 @@ unsigned int readUInt32(unsigned char data[], int *offset){
 	return out;
 }
 unsigned long readUInt64(unsigned char data[], int *offset){
-	unsigned short out =
+	unsigned long out =
 			((unsigned long)(data[*offset]) << 56) +
 			((unsigned long)(data[*offset + 1]) << 48) +
 			((unsigned long)(data[*offset + 2]) << 40) +
