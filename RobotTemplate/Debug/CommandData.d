@@ -1,5 +1,6 @@
 CommandData.d CommandData.o: ../CommandData.cpp ../CommandData.h \
-  ../BitField8.h ../Joystick.h ../Mode.h ../UserConstants.h \
+  ../BitField8.h ../Joystick.h ../BitField16.h ../Mode.h \
+  ../UserConstants.h \
   C:\Users\ehaskins.EHNET\Code\ Local\Next\ Robots\workspace\Arduino/WProgram.h \
   C:\Users\ehaskins.EHNET\Code\ Local\Next\ Robots\workspace\Arduino/wiring.h \
   C:\Users\ehaskins.EHNET\Code\ Local\Next\ Robots\workspace\Arduino/binary.h \
@@ -15,6 +16,8 @@ CommandData.d CommandData.o: ../CommandData.cpp ../CommandData.h \
 ../BitField8.h:
 
 ../Joystick.h:
+
+../BitField16.h:
 
 ../Mode.h:
 

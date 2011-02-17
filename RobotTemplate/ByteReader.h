@@ -23,10 +23,10 @@ public:
 	unsigned long ReadUInt64(void);
 };*/
 //void ReadBytes(unsigned char[], int*, int, unsigned char[]);
-unsigned char ReadUInt8(unsigned char [], int*);
-unsigned short ReadUInt16(unsigned char[], int*);
-unsigned int ReadUInt32(unsigned char[], int*);
-unsigned long ReadUInt64(unsigned char[], int*);
+unsigned char readUInt8(unsigned char [], int*);
+unsigned short readUInt16(unsigned char[], int*);
+unsigned int readUInt32(unsigned char[], int*);
+unsigned long readUInt64(unsigned char[], int*);
 
 
 #endif /* STREAMREADER_H_ */

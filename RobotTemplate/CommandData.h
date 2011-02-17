@@ -24,7 +24,7 @@ struct CommandData {
 	int teamNumber;
 	unsigned char alliance;
 	unsigned char position;
-	Joystick *joysticks[NUM_JOYSTICKS];
+	Joystick joysticks[NUM_JOYSTICKS];
 	unsigned long cRioChecksum;
 	unsigned int fpgaChecksum0;
 	unsigned int fpgaChecksum1;

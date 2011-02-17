@@ -8,13 +8,14 @@
 #ifndef JOYSTICK_H_
 #define JOYSTICK_H_
 
+#include "BitField16.h"
+
 const int NUM_AXES = 6;
-const int NUM_BUTTONS = 16;
 
 struct Joystick{
-	unsigned char Axis[NUM_AXES];
-	bool Button[NUM_BUTTONS];
-
+	void parse(unsigned char[], int*);
+	unsigned char axis[NUM_AXES];
+	BitField16 buttons;
 };
 
 #endif /* JOYSTICK_H_ */

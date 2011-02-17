@@ -14,7 +14,7 @@ void fastLoop(void) {
 void slowLoop(void) {
 	//Process control data here.
 	//In theory this code will run at 50hz whenever the robot is communicating with the DS.
-
+	Serial.println((int)communication.commandData.joysticks[1].axis[1]);
 	//Serial.println("Slow loop: Implement me!");
 }
 void userInit(void) {

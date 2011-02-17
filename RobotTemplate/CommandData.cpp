@@ -19,20 +19,22 @@
 		//CommandData out;
 
 		int offset = 0;
-		packetId = ReadUInt16(data, &offset);
-		mode.data.data = ReadUInt8(data, &offset);
-		dsInputs = ReadUInt8(data, &offset);
-		teamNumber = ReadUInt16(data, &offset);
-		alliance = ReadUInt8(data, &offset);
-		position = ReadUInt8(data, &offset);
+		packetId = readUInt16(data, &offset);
+		mode.data.data = readUInt8(data, &offset);
+		dsInputs = readUInt8(data, &offset);
+		teamNumber = readUInt16(data, &offset);
+		alliance = readUInt8(data, &offset);
+		position = readUInt8(data, &offset);
 		//TODO:Read joysticks.
-		offset += 8*4;//8 bytes/sitck * 4 sticks
+		for (int i = 0; i < 4; i++){
+			joysticks[i].parse(data, &offset);
+		}
 
-		cRioChecksum = ReadUInt64(data, &offset);
-		fpgaChecksum0 = ReadUInt32(data, &offset);
-		fpgaChecksum1 = ReadUInt32(data, &offset);
-		fpgaChecksum2 = ReadUInt32(data, &offset);
-		fpgaChecksum3 = ReadUInt32(data, &offset);
+		cRioChecksum = readUInt64(data, &offset);
+		fpgaChecksum0 = readUInt32(data, &offset);
+		fpgaChecksum1 = readUInt32(data, &offset);
+		fpgaChecksum2 = readUInt32(data, &offset);
+		fpgaChecksum3 = readUInt32(data, &offset);
 
 		//TODO:Read version.
 
