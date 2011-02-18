@@ -9,18 +9,19 @@
 #define ROBOTSTATUSLIGHT_H_
 
 #include "Mode.h"
+#include "Period.h"
 
+static const int NUM_PERIODS = 4;
 struct RobotStatusLight {
 public:
 	void init(int);
-	void update(bool connected, Mode mode);
+	void update(bool connected,bool configMode,  Mode mode);
 
-	bool currentState;
+	int period;
 	bool packetDropped;
 	unsigned long lastStateChangeTime;
 	int ledPin;
-	unsigned int onPeriod;
-	unsigned int offPeriod;
+	Period periods[NUM_PERIODS];
 };
 
 #endif /* ROBOTSTATUSLIGHT_H_ */

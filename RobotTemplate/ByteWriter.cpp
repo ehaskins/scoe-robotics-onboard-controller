@@ -16,3 +16,9 @@ int WriteUInt16(unsigned char data[], unsigned short val, int offset){
 	data[offset + 1] = (unsigned char)val;
 	return offset + 2;
 }
+int writeBytes(unsigned char data[], int dataOffset, unsigned char val[], int count, int valOffset){
+	for (int i = 0; i < count; i++){
+		data[i + dataOffset] = val[i + valOffset];
+	}
+	return dataOffset + count;
+}

@@ -37,15 +37,16 @@
 #ifndef udp_h
 #define udp_h
 
+#include "WProgram.h"
+
 #define UDP_TX_PACKET_MAX_SIZE 24
 
 class UdpClass {
 private:
   uint8_t _sock;  // socket ID for Wiz5100
   uint16_t _port; // local port to listen on
-
 public:
-  void begin(uint16_t);				// initialize, start listening on specified port
+  int begin(uint16_t);				// initialize, start listening on specified port
   int available();								// has data been received?
 
   // C-style buffer-oriented functions

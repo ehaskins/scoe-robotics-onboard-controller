@@ -2,7 +2,8 @@
 #include "UserCode.h"
 #include "FRCCommunication.h"
 #include "UserConstants.h"
-
+#include "Configuration.h"
+#include "Ethernet.h"
 //const int interval = 250; //Milliseconds
 
 int main() {
@@ -21,24 +22,33 @@ int main() {
 
 void setup() {
 	init();
-	//Initialize the serial port. This will be used
-	//to send diagnostic information in this project.
 	Serial.begin(9600);
-	//Configure ledPin as an output
 
-	communication.init(TEAM_NUMBER);
+	config.init();
+	Ethernet.begin(config.mac, config.robotIp, config.gatewayIp, config.subnetMask);
+	Serial.print("Ethernet initialized. IP:");
+	for (int i = 0; i < 4; i++){
+		Serial.print((int)config.robotIp[i]);
+		Serial.print(".");
+	}
+	Serial.print(" MAC:");
+	for (int i = 0; i < 6; i++){
+		Serial.print((int)config.mac[i]);
+		Serial.print(" ");
+	}
+	Serial.println();
+	config.netInit();
+	communication.init();
+
 	userInit();
 
-	//Announce the start of program. Usually a
-	//hyper-terminal is connected to the serial
-	//port on the PC so this message can be seen
-	//there
 	Serial.println("Ready.");
 }
 
 
 
 void loop() {
+	config.poll();
 	if (communication.newDataReady()){
 		slowLoop();
 		communication.sendData();

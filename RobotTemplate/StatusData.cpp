@@ -7,7 +7,7 @@
 
 #include "StatusData.h"
 #include "ByteWriter.h"
-#include "UserConstants.h"
+#include "Configuration.h"
 
 void StatusData::updateResponse(CommandData *data) {
 	replyId = data->packetId;
@@ -28,7 +28,7 @@ void StatusData::getResponseBytes(unsigned char data[]) {
 	offset = WriteUInt16(data, teamNumber, offset);
 
 	for (int i = 0; i < 6; i++) {
-		offset = WriteByte(data, MAC[i], offset);
+		offset = WriteByte(data, config.mac[i], offset);
 	}
 
 	for (int i = 0; i < 8; i++) {

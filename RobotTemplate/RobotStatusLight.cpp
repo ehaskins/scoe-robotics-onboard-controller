@@ -7,7 +7,7 @@
 
 #include "RobotStatusLight.h"
 #include <WProgram.h>
-
+#include <Serial.h>
 /*
 Solid ON = Autonomous Enabled
 
@@ -24,36 +24,64 @@ void RobotStatusLight::init(int pin){
 	ledPin = pin;
 	pinMode(ledPin, OUTPUT);
 	lastStateChangeTime = millis();
+	periods[0].value = true;
+	periods[1].value = false;
+	periods[2].value = true;
+	periods[3].value = false;
 }
 
-void RobotStatusLight::update(bool connected, Mode mode){
+void RobotStatusLight::update(bool connected, bool configMode, Mode mode){
 	if (connected){
 		if (mode.getEnabled()){
 			if(mode.getAutonomous()){
-				onPeriod = 1500;
-				offPeriod = 0;
+				periods[0].length = 1500;
+				periods[1].length = 0;
+				periods[2].length = 0;
+				periods[3].length = 0;
 			}
 			else{
-			onPeriod = 1500;
-			offPeriod = 100;
+				periods[0].length = 1500;
+				periods[1].length = 100;
+				periods[2].length = 0;
+				periods[3].length = 0;
 			}
 		}
 		else{
-			onPeriod = 900;
-			offPeriod = 900;
+			periods[0].length = 900;
+			periods[1].length = 900;
+			periods[2].length = 0;
+			periods[3].length = 0;
 		}
 	}
 	else{
-		onPeriod = 200;
-		offPeriod = 200;
+		periods[0].length = 200;
+		periods[1].length = 200;
+		periods[2].length = 0;
+		periods[3].length = 0;
 	}
 
-	unsigned int period = currentState ? onPeriod : offPeriod;
-	unsigned long now = millis();
-	unsigned long elapsed = now - lastStateChangeTime;
-	if (elapsed >= period){
-		lastStateChangeTime = now;
-		currentState = !currentState;
-		digitalWrite(ledPin, currentState ? HIGH : LOW);
+	if (configMode){
+		periods[0].length = 100;
+		periods[1].length = 1000;
+		periods[2].length = 100;
+		periods[3].length = 1000;
+	}
+
+	bool waiting = false;
+	//Serial.print(".");
+	while (!waiting){
+		unsigned long now = millis();
+		unsigned long elapsed = now - lastStateChangeTime;
+		if (elapsed >= periods[period].length){
+			lastStateChangeTime = now;
+			period++;
+			if (period == NUM_PERIODS)
+				period = 0;
+			//Serial.println(period);
+			digitalWrite(ledPin, periods[period].value ? HIGH : LOW);
+		}
+		else{
+			waiting = true;
+		}
 	}
 }
