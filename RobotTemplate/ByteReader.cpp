@@ -33,10 +33,10 @@ unsigned short readUInt16(unsigned char data[], int *offset){
 }
 unsigned int readUInt32(unsigned char data[], int *offset){
 	unsigned int out =
-			((unsigned int)(data[*offset]) << 24) +
-			((unsigned int)(data[*offset + 1]) << 16) +
-			((unsigned int)(data[*offset + 2]) << 8) +
-			((unsigned int)(data[*offset + 3]));
+			(((unsigned int)data[*offset]) << 24) +
+			(((unsigned int)data[*offset + 1]) << 16) +
+			(((unsigned int)data[*offset + 2]) << 8) +
+			(((unsigned int)data[*offset + 3]));
 	/*unsigned char byteCount = 2;
 	for (int i = 0; i < byteCount; i++){
 		out += data[*offset + byteCount - i] << (8 * i);
@@ -60,4 +60,10 @@ unsigned long readUInt64(unsigned char data[], int *offset){
 	}*/
 	*offset += 8;
 	return out;
+}
+void readBytes(unsigned char data[], unsigned char out[], int count, int *offset){
+	for (int i = 0; i < count; i++){
+		out[i] = data[i + *offset];
+	}
+	*offset += count;
 }

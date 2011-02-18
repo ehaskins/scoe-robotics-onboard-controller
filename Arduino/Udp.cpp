@@ -31,11 +31,22 @@
 #include "Ethernet.h"
 #include "Udp.h"
 
+static const int NUM_SOCKETS = 4;
+static bool _usedSockets[NUM_SOCKETS];
+
 /* Start UDP socket, listening at local port PORT */
-void UdpClass::begin(uint16_t port) {
+int UdpClass::begin(uint16_t port) {
   _port = port;
-  _sock = 0; //TODO: should not be hardcoded
-  socket(_sock, SnMR::UDP, _port, 0);
+  _sock = -1;
+  for (int i = 0; i < NUM_SOCKETS; i++){
+	  if (_usedSockets[i] == false){
+		  _sock = i;
+		  _usedSockets[_sock] = true;
+		  socket(_sock, SnMR::UDP, _port, 0);
+		  break;
+	  }
+  }
+  return _sock;
 }
 
 /* Send packet contained in buf of length len to peer at specified ip, and port */
@@ -132,9 +143,3 @@ uint16_t ret = readPacket( (byte*)buf, bufLen, ip, &myPort);
 port = myPort;
 return ret;
 }
-
-
-
-
-/* Create one global object */
-UdpClass Udp;
