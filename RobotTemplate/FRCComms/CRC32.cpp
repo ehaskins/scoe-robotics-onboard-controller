@@ -14,8 +14,8 @@ void CRC32::init() {
 	seed = 0xffffffff;
 	initializeTable();
 }
-unsigned int CRC32::compute(unsigned char data[], int offset, int count) {
-	unsigned int crc = seed;
+unsigned long CRC32::compute(unsigned char data[], int offset, int count) {
+	unsigned long crc = seed;
 	for (int i = offset; i < offset + count; i++) {
 		crc = (crc >> 8) ^ table[data[i] ^ crc & 0xff];
 	}
@@ -23,8 +23,8 @@ unsigned int CRC32::compute(unsigned char data[], int offset, int count) {
 }
 
 void CRC32::initializeTable() {
-	for (unsigned int i = 0; i < 256; i++) {
-		unsigned int entry = i;
+	for (unsigned long i = 0; i < 256; i++) {
+		unsigned long entry = i;
 		for (int j = 0; j < 8; j++)
 			if ((entry & 1) == 1)
 				entry = (entry >> 1) ^ polynomial;

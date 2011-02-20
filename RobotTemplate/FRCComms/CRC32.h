@@ -10,12 +10,12 @@
 
 struct CRC32 {
 private:
-	unsigned int seed;
-	unsigned int polynomial;
-	unsigned int table[256];
+	unsigned long seed;
+	unsigned long polynomial;
+	unsigned long table[256];
 public:
 	void init();
-	unsigned int compute(unsigned char data[], int offset, int count);
+	unsigned long compute(unsigned char data[], int offset, int count);
 	void initializeTable();
 };
 extern CRC32 CRC;
