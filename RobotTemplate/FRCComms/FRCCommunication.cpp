@@ -9,7 +9,7 @@
 #include "CommandData.h"
 #include <Ethernet.h>
 #include <Udp.h>
-#include "UserConstants.h"
+#include "..\UserConstants.h"
 #include "Configuration.h"
 FRCCommunication communication;
 

@@ -1,9 +1,10 @@
 #include <WProgram.h>
-#include "UserCode.h"
+#include "..\UserCode.h"
+#include "..\UserConstants.h"
 #include "FRCCommunication.h"
-#include "UserConstants.h"
 #include "Configuration.h"
 #include "Ethernet.h"
+#include "CRC32.h"
 //const int interval = 250; //Milliseconds
 
 int main() {
@@ -24,6 +25,7 @@ void setup() {
 	init();
 	Serial.begin(9600);
 
+	CRC.init();
 	config.init();
 	Ethernet.begin(config.mac, config.robotIp, config.gatewayIp, config.subnetMask);
 	Serial.print("Ethernet initialized. IP:");

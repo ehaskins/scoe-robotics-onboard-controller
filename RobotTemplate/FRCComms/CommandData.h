@@ -8,7 +8,7 @@
 #include "BitField8.h"
 #include "Joystick.h"
 #include "Mode.h"
-#include "UserConstants.h"
+#include "..\UserConstants.h"
 #ifndef COMMANDDATA_H_
 #define COMMANDDATA_H_
 const int NUM_JOYSTICKS = 4;
