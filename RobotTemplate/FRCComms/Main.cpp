@@ -25,7 +25,9 @@ void setup() {
 	init();
 	Serial.begin(9600);
 
-	CRC.init();
+	unsigned char buf[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+	Serial.println(crc(buf, 10));
+
 	config.init();
 	Ethernet.begin(config.mac, config.robotIp, config.gatewayIp, config.subnetMask);
 	Serial.print("Ethernet initialized. IP:");

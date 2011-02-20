@@ -49,6 +49,11 @@ bool FRCCommunication::newDataReady() {
 
 		commandData.parse(commandBytes);
 
+		if (!commandData.isValid){
+			isConnected = false;
+			Serial.println("Invalid packet received.");
+		}
+
 		//Implement E-Stop safety
 		if (commandData.mode.getEStop()){
 			if (!isEStoped){

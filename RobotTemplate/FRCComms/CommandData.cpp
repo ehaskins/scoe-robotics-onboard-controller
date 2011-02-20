@@ -7,7 +7,7 @@
 
 #include "CommandData.h"
 #include "ByteReader.h"
-
+#include "CRC32.h"
 	/*CommandData::CommandData(){
 		for (int i = 0; i < NUM_JOYSTICKS; i++){
 			Joystick *temp = new Joystick();
@@ -40,4 +40,13 @@
 
 		//TODO:Verify Checksum
 
+		int crcOffset = COMMAND_PACKET_SIZE - 4;
+		int temp = crcOffset;
+		unsigned long dataCrc = readUInt32(data, &temp);
+		for (int i = crcOffset; i < crcOffset + 4; i++){
+			data[i] = 0;
+		}
+		unsigned long calculatedCrc = crc(data, COMMAND_PACKET_SIZE);
+
+		isValid = calculatedCrc == dataCrc;
 	}
