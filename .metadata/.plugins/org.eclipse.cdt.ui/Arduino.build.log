@@ -2,10 +2,202 @@
 **** Build of configuration Debug for project Arduino ****
 
 make all 
+Building file: ../Client.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Client.d" -MT"Client.d" -c -o"Client.o" "../Client.cpp"
+In file included from ../w5100.h:14,
+                 from ../Client.cpp:1:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+../Client.h: In constructor 'Client::Client(uint8_t*, uint16_t)':
+../Client.h:34: warning: 'Client::_port' will be initialized after
+../Client.h:32: warning:   'uint8_t Client::_sock'
+../Client.cpp:19: warning:   when initialized here
+Finished building: ../Client.cpp
+ 
 Building file: ../EEPROM.cpp
 Invoking: AVR C++ Compiler
 avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"EEPROM.d" -MT"EEPROM.d" -c -o"EEPROM.o" "../EEPROM.cpp"
 Finished building: ../EEPROM.cpp
+ 
+Building file: ../Ethernet.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Ethernet.d" -MT"Ethernet.d" -c -o"Ethernet.o" "../Ethernet.cpp"
+In file included from ../w5100.h:14,
+                 from ../Ethernet.cpp:1:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+Finished building: ../Ethernet.cpp
+ 
+Building file: ../HardwareSerial.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"HardwareSerial.d" -MT"HardwareSerial.d" -c -o"HardwareSerial.o" "../HardwareSerial.cpp"
+In file included from ../wiring_private.h:30,
+                 from ../HardwareSerial.cpp:28:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../HardwareSerial.cpp
+ 
+Building file: ../Print.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Print.d" -MT"Print.d" -c -o"Print.o" "../Print.cpp"
+../Print.cpp: In member function 'void Print::print(const String&)':
+../Print.cpp:48: warning: comparison between signed and unsigned integer expressions
+Finished building: ../Print.cpp
+ 
+Building file: ../SPI.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"SPI.d" -MT"SPI.d" -c -o"SPI.o" "../SPI.cpp"
+In file included from ../SPI.cpp:12:
+../SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+../SPI.h:20:1: warning: this is the location of the previous definition
+Finished building: ../SPI.cpp
+ 
+Building file: ../Server.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Server.d" -MT"Server.d" -c -o"Server.o" "../Server.cpp"
+In file included from ../w5100.h:14,
+                 from ../Server.cpp:1:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+Finished building: ../Server.cpp
+ 
+Building file: ../Tone.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Tone.d" -MT"Tone.d" -c -o"Tone.o" "../Tone.cpp"
+../Tone.cpp:93: warning: only initialized variables can be placed into program memory area
+Finished building: ../Tone.cpp
+ 
+Building file: ../Udp.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"Udp.d" -MT"Udp.d" -c -o"Udp.o" "../Udp.cpp"
+In file included from ../w5100.h:14,
+                 from ../Udp.cpp:29:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+Finished building: ../Udp.cpp
+ 
+Building file: ../WInterrupts.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"WInterrupts.d" -MT"WInterrupts.d" -c -o"WInterrupts.o" "../WInterrupts.c"
+In file included from ../wiring_private.h:30,
+                 from ../WInterrupts.c:34:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../WInterrupts.c
+ 
+Building file: ../WMath.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"WMath.d" -MT"WMath.d" -c -o"WMath.o" "../WMath.cpp"
+Finished building: ../WMath.cpp
+ 
+Building file: ../WString.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"WString.d" -MT"WString.d" -c -o"WString.o" "../WString.cpp"
+Finished building: ../WString.cpp
+ 
+Building file: ../pins_arduino.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"pins_arduino.d" -MT"pins_arduino.d" -c -o"pins_arduino.o" "../pins_arduino.c"
+In file included from ../wiring_private.h:30,
+                 from ../pins_arduino.c:26:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+../pins_arduino.c:84: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:85: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:86: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:87: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:88: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:89: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:90: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:91: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:93: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:94: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:95: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:100: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:101: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:102: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:103: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:104: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:105: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:106: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:107: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:109: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:110: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:111: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:116: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:117: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:118: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:119: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:120: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:121: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:122: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:123: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:125: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:126: warning: initialization makes integer from pointer without a cast
+../pins_arduino.c:127: warning: initialization makes integer from pointer without a cast
+Finished building: ../pins_arduino.c
+ 
+Building file: ../socket.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"socket.d" -MT"socket.d" -c -o"socket.o" "../socket.cpp"
+In file included from ../w5100.h:14,
+                 from ../socket.cpp:1:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+../socket.cpp: In function 'uint8_t socket(SOCKET, uint8_t, uint16_t, uint8_t)':
+../socket.cpp:12: warning: unused variable 'ret'
+Finished building: ../socket.cpp
+ 
+Building file: ../w5100.cpp
+Invoking: AVR C++ Compiler
+avr-g++ -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -Wl,--gc-sections -funsigned-char -funsigned-bitfields -fno-exceptions -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"w5100.d" -MT"w5100.d" -c -o"w5100.o" "../w5100.cpp"
+In file included from ../w5100.h:14,
+                 from ../w5100.cpp:14:
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:25:1: warning: "SPI_CLOCK_DIV64" redefined
+C:\Users\ehaskins\Code Local\Onboard\Arduino/SPI.h:20:1: warning: this is the location of the previous definition
+../w5100.cpp: In static member function 'static uint16_t W5100Class::write(uint16_t, uint8_t*, uint16_t)':
+../w5100.cpp:137: warning: comparison between signed and unsigned integer expressions
+../w5100.cpp: In static member function 'static uint16_t W5100Class::read(uint16_t, uint8_t*, uint16_t)':
+../w5100.cpp:163: warning: comparison between signed and unsigned integer expressions
+Finished building: ../w5100.cpp
+ 
+Building file: ../wiring.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"wiring.d" -MT"wiring.d" -c -o"wiring.o" "../wiring.c"
+In file included from ../wiring_private.h:30,
+                 from ../wiring.c:25:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../wiring.c
+ 
+Building file: ../wiring_analog.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"wiring_analog.d" -MT"wiring_analog.d" -c -o"wiring_analog.o" "../wiring_analog.c"
+In file included from ../wiring_private.h:30,
+                 from ../wiring_analog.c:27:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../wiring_analog.c
+ 
+Building file: ../wiring_digital.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"wiring_digital.d" -MT"wiring_digital.d" -c -o"wiring_digital.o" "../wiring_digital.c"
+In file included from ../wiring_private.h:30,
+                 from ../wiring_digital.c:27:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../wiring_digital.c
+ 
+Building file: ../wiring_pulse.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"wiring_pulse.d" -MT"wiring_pulse.d" -c -o"wiring_pulse.o" "../wiring_pulse.c"
+In file included from ../wiring_private.h:30,
+                 from ../wiring_pulse.c:25:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../wiring_pulse.c
+ 
+Building file: ../wiring_shift.c
+Invoking: AVR Compiler
+avr-gcc -I"C:\Users\ehaskins\Code Local\Onboard\Arduino" -Wall -Os -fpack-struct -fshort-enums -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega2560 -DF_CPU=16000000UL -MMD -MP -MF"wiring_shift.d" -MT"wiring_shift.d" -c -o"wiring_shift.o" "../wiring_shift.c"
+In file included from ../wiring_private.h:30,
+                 from ../wiring_shift.c:25:
+c:/winavr-20081205/lib/gcc/../../avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>."
+Finished building: ../wiring_shift.c
  
 Building target: libArduino.a
 Invoking: AVR Archiver

@@ -72,7 +72,7 @@ void Configuration::loadData(){
 }
 void Configuration::writeData(){
 	byte deviceIdBytes[2];
-	WriteUInt16(deviceIdBytes, deviceId, 0);
+	writeUInt16(deviceIdBytes, deviceId, 0);
 	EEPROM.write(0, INITIALIZED);
 
 	for(int i = 0; i < 2; i++){
@@ -81,14 +81,14 @@ void Configuration::writeData(){
 
 	byte data[CONFIG_DATA_SIZE];
 	int dataOffset = 0;
-	dataOffset = WriteUInt16(data, teamNumber, dataOffset);
+	dataOffset = writeUInt16(data, teamNumber, dataOffset);
 	dataOffset = writeBytes(data, dataOffset, mac, 6, 0);
 	data[dataOffset] = network; dataOffset++;
 	data[dataOffset] = robotHostIp; dataOffset++;
 	dataOffset = writeBytes(data, dataOffset, gatewayIp, 4, 0);
 	dataOffset = writeBytes(data, dataOffset, subnetMask, 4, 0);
-	dataOffset = WriteUInt16(data, statusTransmitPort, dataOffset);
-	dataOffset = WriteUInt16(data, controlReceivePort, dataOffset);
+	dataOffset = writeUInt16(data, statusTransmitPort, dataOffset);
+	dataOffset = writeUInt16(data, controlReceivePort, dataOffset);
 
 	for(int i = 0; i < CONFIG_DATA_SIZE; i++){
 		EEPROM.write(i + offset, data[i]);
@@ -125,7 +125,7 @@ void Configuration::poll(void){
 		socket.readPacket((char *)request, 3, remoteIp, remotePort);
 
 		byte response[] = {0, 0, config.mac[0], config.mac[1], config.mac[2], config.mac[3], config.mac[4], config.mac[5]};
-		WriteUInt16(response, config.teamNumber, 0);
+		writeUInt16(response, config.teamNumber, 0);
 		Serial.println("Config discovery packet received.");
 		unsigned char ip[4] = {0xff, 0xff, 0xff, 0xff};
 		socket.sendPacket(response, 8, ip, 1001);
