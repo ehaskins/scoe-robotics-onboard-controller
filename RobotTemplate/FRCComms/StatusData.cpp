@@ -14,6 +14,9 @@ void StatusData::updateResponse(CommandData *data) {
 	mode = data->mode;
 }
 void StatusData::getResponseBytes(unsigned char data[]) {
+	for (int i = 0; i < STATUS_PACKET_SIZE; i++){
+		data[i] = 0;
+	}
 	int offset = 0;
 
 	offset = writeByte(data, mode.data.data, offset);
@@ -41,7 +44,7 @@ void StatusData::getResponseBytes(unsigned char data[]) {
 
 	offset = writeUInt16(data, replyId, offset);
 
-	unsigned long crc = CRC.compute(data, 0, STATUS_PACKET_SIZE);
-	writeUInt32(data, crc, STATUS_PACKET_SIZE - 4);
+	unsigned long c = crc(data, STATUS_PACKET_SIZE);
+	writeUInt32(data, c, STATUS_PACKET_SIZE - 4);
 }
 

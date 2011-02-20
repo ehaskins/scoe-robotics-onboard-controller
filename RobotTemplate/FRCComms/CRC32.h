@@ -8,15 +8,7 @@
 #ifndef CRC32_H_
 #define CRC32_H_
 
-struct CRC32 {
-private:
-	unsigned long seed;
-	unsigned long polynomial;
-	unsigned long table[256];
-public:
-	void init();
-	unsigned long compute(unsigned char data[], int offset, int count);
-	void initializeTable();
-};
-extern CRC32 CRC;
+void make_crc_table(void);
+unsigned long update_crc(unsigned long crc, unsigned char *buf, int len);
+unsigned long crc(unsigned char *buf, int len);
 #endif /* CRC32_H_ */

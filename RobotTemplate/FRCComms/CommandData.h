@@ -31,6 +31,7 @@ struct CommandData {
 	unsigned int fpgaChecksum2;
 	unsigned int fpgaChecksum3;
 	char version[8];
+	bool isValid;
 };
 
 
