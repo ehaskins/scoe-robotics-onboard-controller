@@ -25,8 +25,8 @@ public:
 //void ReadBytes(unsigned char[], int*, int, unsigned char[]);
 unsigned char readUInt8(unsigned char [], int*);
 unsigned short readUInt16(unsigned char[], int*);
-unsigned int readUInt32(unsigned char[], int*);
-unsigned long readUInt64(unsigned char[], int*);
+unsigned long readUInt32(unsigned char[], int*);
+unsigned long long readUInt64(unsigned char[], int*);
 void readBytes(unsigned char data[], unsigned char out[], int count, int *offset);
 
 #endif /* STREAMREADER_H_ */

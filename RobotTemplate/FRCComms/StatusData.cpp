@@ -41,7 +41,7 @@ void StatusData::getResponseBytes(unsigned char data[]) {
 
 	offset = writeUInt16(data, replyId, offset);
 
-	unsigned int crc = CRC.compute(data, 0, STATUS_PACKET_SIZE);
+	unsigned long crc = CRC.compute(data, 0, STATUS_PACKET_SIZE);
 	writeUInt32(data, crc, STATUS_PACKET_SIZE - 4);
 }
 
