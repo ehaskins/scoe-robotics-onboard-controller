@@ -10,7 +10,8 @@
 
 
 void fastLoop(void);
-void slowLoop(void);
+void commLoop(void);
+void fixedLoop(int delayed, int elapsed);
 void userInit(void);
 
 #endif /* USERCODE_H_ */

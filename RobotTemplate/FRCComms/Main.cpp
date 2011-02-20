@@ -49,13 +49,26 @@ void setup() {
 	Serial.println("Ready.");
 }
 
-
-
+unsigned long lastLoopTime = 0;
+unsigned long nextLoopTime = 0;
+unsigned long fixedLoopPeriod = 0;
 void loop() {
 	config.poll();
 	if (communication.newDataReady()){
-		slowLoop();
+		commLoop();
 		communication.sendData();
+	}
+	unsigned long now = millis();
+	if (nextLoopTime == 0)
+	{
+		fixedLoopPeriod = 1000/FIXED_LOOP_FREQUENCY;
+		nextLoopTime = now;
+		lastLoopTime = 0;
+	}
+	if (now >= nextLoopTime){
+		fixedLoop(now - nextLoopTime, now - lastLoopTime);
+		nextLoopTime += fixedLoopPeriod;
+		lastLoopTime = now;
 	}
 	fastLoop();
 }
