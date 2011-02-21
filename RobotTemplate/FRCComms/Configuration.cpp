@@ -11,21 +11,28 @@
 #include <EEPROM.h>
 Configuration config;
 
-void Configuration::init(void){
+void Configuration::init(void) {
 	offset = 3;
-	if (EEPROM.read(0) == INITIALIZED){
-		loadData();
-	}
-	else{
+	if (getDeviceId() == CONFIG_CURRENT_FORMAT_VERSION) {
+		loadData(getCurrentSet());
+	} else {
 		initStorage();
 	}
-	Serial.print("Device ID:");
-	Serial.println(deviceId);
+	Serial.print("Device ID: 0x");
+	Serial.println(getDeviceId(), 16);
 }
-void Configuration::initStorage(){
+void Configuration::netInit(void) {
+	for (int i = 0; i < 4; i++)
+		broadcastIp[i] = 0xff;
+	Serial.print("Configuration socket #");
+	Serial.println(socket.begin(1000));
+}
+void Configuration::initStorage() {
 	Serial.print("EEPROM Initializing...");
 	randomSeed(analogRead(0));
-	deviceId = (unsigned short)random(0xFFFF);
+	setDeviceId((unsigned short)random(0xFFFF));
+	setFormatVersion(CONFIG_CURRENT_FORMAT_VERSION);
+	setSetCount(1);
 
 	mac[0] = 0x90;
 	mac[1] = 0xA2;
@@ -52,56 +59,53 @@ void Configuration::initStorage(){
 	statusTransmitPort = 1150;
 	controlReceivePort = 1140;
 
-	writeData();
+	writeData(0);
 
 	Serial.println(" COMPLETE!");
 }
-void Configuration::loadData(){
-	byte deviceIdBytes[2];
-	for(int i = 0; i < 2; i++){
-		deviceIdBytes[i] = EEPROM.read(i + 1);
-	}
-	int temp = 0;
-	deviceId = readUInt16(deviceIdBytes, &temp);
-
-	byte data[CONFIG_DATA_SIZE];
-	for(int i = 0; i < CONFIG_DATA_SIZE; i++){
-		data[i] = EEPROM.read(i + offset);
-	}
-	loadData(data);
+void Configuration::writeData() {
+	writeData(getCurrentSet());
 }
-void Configuration::writeData(){
-	byte deviceIdBytes[2];
-	writeUInt16(deviceIdBytes, deviceId, 0);
-	EEPROM.write(0, INITIALIZED);
-
-	for(int i = 0; i < 2; i++){
-		EEPROM.write(i + 1, deviceIdBytes[i]);
-	}
-
-	byte data[CONFIG_DATA_SIZE];
+void Configuration::writeData(unsigned char set) {
+	unsigned char data[CONFIG_DATA_SIZE];
 	int dataOffset = 0;
 	dataOffset = writeUInt16(data, teamNumber, dataOffset);
 	dataOffset = writeBytes(data, dataOffset, mac, 6, 0);
-	data[dataOffset] = network; dataOffset++;
-	data[dataOffset] = robotHostIp; dataOffset++;
+	data[dataOffset] = network;
+	dataOffset++;
+	data[dataOffset] = robotHostIp;
+	dataOffset++;
 	dataOffset = writeBytes(data, dataOffset, gatewayIp, 4, 0);
 	dataOffset = writeBytes(data, dataOffset, subnetMask, 4, 0);
 	dataOffset = writeUInt16(data, statusTransmitPort, dataOffset);
 	dataOffset = writeUInt16(data, controlReceivePort, dataOffset);
 
-	for(int i = 0; i < CONFIG_DATA_SIZE; i++){
+	writeData(data, set);
+}
+void Configuration::writeData(unsigned char data[], unsigned char set) {
+	int offset = getSetOffset(set);
+
+	for (unsigned int i = 0; i < CONFIG_DATA_SIZE; i++) {
 		EEPROM.write(i + offset, data[i]);
 	}
 }
-
-void Configuration::loadData(unsigned char data[]){
+void Configuration::loadData(unsigned char set) {
+	int offset = getSetOffset(set);
+	byte data[CONFIG_DATA_SIZE];
+	for (unsigned int i = 0; i < CONFIG_DATA_SIZE; i++) {
+		data[i] = EEPROM.read(i + offset);
+	}
+	loadData(data);
+}
+void Configuration::loadData(unsigned char data[]) {
 	int dataOffset = 0;
 
 	teamNumber = readUInt16(data, &dataOffset);
 	readBytes(data, mac, 6, &dataOffset);
-	network = data[dataOffset]; dataOffset++;
-	robotHostIp = data[dataOffset]; dataOffset++;
+	network = data[dataOffset];
+	dataOffset++;
+	robotHostIp = data[dataOffset];
+	dataOffset++;
 	readBytes(data, subnetMask, 4, &dataOffset);
 	readBytes(data, gatewayIp, 4, &dataOffset);
 	statusTransmitPort = readUInt16(data, &dataOffset);
@@ -112,38 +116,115 @@ void Configuration::loadData(unsigned char data[]){
 	robotIp[2] = teamNumber % 100;
 	robotIp[3] = robotHostIp;
 }
-void Configuration::netInit(void){
-	Serial.print("Configuration socket #");
-	Serial.println(socket.begin(1000));
+
+void Configuration::poll(void) {
+	int requestLength = socket.available();
+	requestLength -= 8;
+	if (requestLength >= CONFIG_PACKET_HEADER_LENGTH) {
+		unsigned char requestData[CONFIG_MAX_RX];
+		int requestOffset = 0;
+		socket.readPacket((char *) requestData, requestLength, remoteIp,
+				remotePort);
+
+		unsigned char command = requestData[requestOffset];
+		requestOffset++;
+		unsigned short deviceId = readUInt16(requestData, &requestOffset);
+		switch (command) {
+		case 0x01:
+			if (deviceId == 0 || deviceId == getDeviceId()) {
+				Serial.println("Configuration discovery packet received.");
+
+				unsigned char response[] = { 0, 0, config.mac[0], config.mac[1],
+						config.mac[2], config.mac[3], config.mac[4],
+						config.mac[5] };
+				writeUInt16(response, getDeviceId(), 0);
+				socket.sendPacket(response, 8, broadcastIp, 1001);
+			}
+			break;
+		case 0x02:
+			if (deviceId == 0 || deviceId == getDeviceId()) {
+				unsigned char set = requestData[requestOffset];
+				requestOffset++;
+				Serial.println("Configuration read request received.");
+				int configDataLength = CONFIG_DATA_SIZE;
+				unsigned char responseData[CONFIG_DATA_SIZE + 3];
+
+				writeUInt16(responseData, getDeviceId(), 0);
+				responseData[2] = set;
+				int offset = getSetOffset(set);
+				for (int i = 0; i < configDataLength; i++) {
+					responseData[i + 3] = EEPROM.read(i + offset);
+				}
+
+				socket.sendPacket(responseData, configDataLength + 3,
+						broadcastIp, 1001);
+			}
+			break;
+		case 0x03:
+			if (deviceId == getDeviceId()) {
+				unsigned char set = requestData[requestOffset];
+				requestOffset++;
+				Serial.println("Configuration write request received.");
+				if (requestLength - requestOffset >= (int)CONFIG_DATA_SIZE) {
+					Serial.print("Updating configuration...");
+					unsigned char data[CONFIG_DATA_SIZE];
+					int temp = 2;
+					readBytes(requestData, data, CONFIG_DATA_SIZE, &temp);
+					loadData(data);
+					writeData(set);
+					sendResponse(true);
+				} else {
+					sendResponse(false);
+				}
+			}
+			break;
+		case 0x04:
+			if (deviceId == getDeviceId()) {
+				Serial.println("Configuration reset command received.");
+				setFormatVersion(0);
+				Serial.print("Reboot Arduino to complete.");
+			}
+			break;
+		}
+
+	}
+}
+void Configuration::sendResponse(bool success) {
+	unsigned char responseData[3] = { 0, 0, success ? 1 : 0 };
+	writeUInt16(responseData, getDeviceId(), 0);
+	socket.sendPacket(responseData, 3, broadcastIp, 1001);
+}
+unsigned char Configuration::getFormatVersion() {
+	return EEPROM.read(CONFIG_FORMAT_VERSION_OFFSET);
+}
+void Configuration::setFormatVersion(unsigned char value) {
+	EEPROM.write(CONFIG_FORMAT_VERSION_OFFSET, value);
+}
+unsigned char Configuration::getSetCount() {
+	return EEPROM.read(CONFIG_NUM_SETS_OFFSET);
+}
+void Configuration::setSetCount(unsigned char value) {
+	EEPROM.write(CONFIG_NUM_SETS_OFFSET, value);
+}
+unsigned int Configuration::getDeviceId() {
+	byte deviceIdBytes[2];
+	for (int i = 0; i < 2; i++) {
+		deviceIdBytes[i] = EEPROM.read(i + CONFIG_DEVICE_ID_OFFSET);
+	}
+	int temp = 0;
+	return readUInt16(deviceIdBytes, &temp);
+}
+void Configuration::setDeviceId(unsigned int value) {
+	byte deviceIdBytes[2];
+	writeUInt16(deviceIdBytes, value, 0);
+	for (int i = 0; i < 2; i++) {
+		EEPROM.write(i + CONFIG_DEVICE_ID_OFFSET, deviceIdBytes[i]);
+	}
+}
+unsigned int Configuration::getSetOffset(unsigned char set) {
+	return CONFIG_SETS_OFFSET + CONFIG_DATA_SIZE * set;
 }
 
-void Configuration::poll(void){
-	int packetSize = socket.available();
-	packetSize -= 8;
-	if (packetSize == 3){//Discovery packet
-		unsigned char request[3];
-		socket.readPacket((char *)request, 3, remoteIp, remotePort);
-
-		byte response[] = {0, 0, config.mac[0], config.mac[1], config.mac[2], config.mac[3], config.mac[4], config.mac[5]};
-		writeUInt16(response, config.teamNumber, 0);
-		Serial.println("Config discovery packet received.");
-		unsigned char ip[4] = {0xff, 0xff, 0xff, 0xff};
-		socket.sendPacket(response, 8, ip, 1001);
-	}
-	else if (packetSize == CONFIG_DATA_SIZE + 2){
-		unsigned char request[CONFIG_DATA_SIZE + 2];
-		socket.readPacket((char *)request, CONFIG_DATA_SIZE + 2, remoteIp, remotePort);
-		Serial.println("Configuration update request received.");
-		unsigned short id = readUInt16(request, 0);
-		if (id == deviceId){
-			Serial.print("Updating configuration...");
-			unsigned char data[CONFIG_DATA_SIZE];
-			int temp = 2;
-			readBytes(request, data, CONFIG_DATA_SIZE, &temp);
-			loadData(data);
-			writeData();
-			Serial.print(" Complete!");
-
-		}
-	}
+unsigned char Configuration::getCurrentSet() {
+	return 0;
 }
