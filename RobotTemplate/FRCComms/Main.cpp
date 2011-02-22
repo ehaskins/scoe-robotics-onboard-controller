@@ -5,6 +5,7 @@
 #include "Configuration.h"
 #include "Ethernet.h"
 #include "CRC32.h"
+
 //const int interval = 250; //Milliseconds
 
 int main() {
@@ -37,8 +38,8 @@ void setup() {
 	}
 	Serial.print(" MAC:");
 	for (int i = 0; i < 6; i++){
-		Serial.print((int)config.mac[i]);
-		Serial.print(" ");
+		Serial.print((int)config.mac[i], 16);
+		if (i < 5) Serial.print(":");
 	}
 	Serial.println();
 	config.netInit();
