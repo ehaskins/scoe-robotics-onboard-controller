@@ -7,7 +7,6 @@
 
 #include "RobotStatusLight.h"
 #include <WProgram.h>
-#include <Serial.h>
 /*
 Solid ON = Autonomous Enabled
 
@@ -30,7 +29,7 @@ void RobotStatusLight::init(int pin){
 	periods[3].value = false;
 }
 
-void RobotStatusLight::update(bool connected, bool configMode, Mode mode){
+void RobotStatusLight::update(bool connected, bool droppedPacket, Mode mode){
 	if (connected){
 		if (mode.getEnabled()){
 			if(mode.getAutonomous()){
@@ -60,17 +59,41 @@ void RobotStatusLight::update(bool connected, bool configMode, Mode mode){
 		periods[3].length = 0;
 	}
 
-	if (configMode){
-		periods[0].length = 100;
-		periods[1].length = 1000;
-		periods[2].length = 100;
-		periods[3].length = 1000;
-	}
-
 	bool waiting = false;
 	//Serial.print(".");
+
+	unsigned long now = millis();
+	bool output;
 	while (!waiting){
-		unsigned long now = millis();
+		unsigned long elapsed = now - lastStateChangeTime;
+		if (elapsed >= periods[period].length){
+			lastStateChangeTime = now;
+			period++;
+			if (period == NUM_PERIODS)
+				period = 0;
+		}
+		else{
+			waiting = true;
+		}
+		output = periods[period].value;
+	}
+
+	if (droppedPacket) droppedStartTime = now;
+	if (droppedStartTime != 0){
+		unsigned long droppedElapsed = now - droppedStartTime;
+		if (droppedElapsed < DROPPED_BLINK_DURATION){
+			output = !output;
+		}
+		else {
+			droppedStartTime = 0;
+		}
+	}
+
+	digitalWrite(ledPin, output ? HIGH : LOW);
+
+	/*	bool output = false;
+	unsigned long now = millis();
+	  while (!waiting){
 		unsigned long elapsed = now - lastStateChangeTime;
 		if (elapsed >= periods[period].length){
 			lastStateChangeTime = now;
@@ -78,10 +101,21 @@ void RobotStatusLight::update(bool connected, bool configMode, Mode mode){
 			if (period == NUM_PERIODS)
 				period = 0;
 			//Serial.println(period);
-			digitalWrite(ledPin, periods[period].value ? HIGH : LOW);
+			output = periods[period].value;
 		}
 		else{
 			waiting = true;
 		}
 	}
+	if (droppedPacket) droppedStartTime = now;
+	if (droppedStartTime != 0){
+		unsigned long droppedElapsed = now - droppedStartTime;
+		if (droppedElapsed < DROPPED_BLINK_DURATION){
+			output = !output;
+		}
+		else {
+			droppedStartTime = 0;
+		}
+	}
+*/
 }

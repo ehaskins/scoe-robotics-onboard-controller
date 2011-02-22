@@ -13,10 +13,11 @@ Configuration config;
 
 void Configuration::init(void) {
 	offset = 3;
-	if (getDeviceId() == CONFIG_CURRENT_FORMAT_VERSION) {
+	if (getFormatVersion() == CONFIG_CURRENT_FORMAT_VERSION) {
 		loadData(getCurrentSet());
 	} else {
 		initStorage();
+		loadData(getCurrentSet());
 	}
 	Serial.print("Device ID: 0x");
 	Serial.println(getDeviceId(), 16);
@@ -30,8 +31,8 @@ void Configuration::netInit(void) {
 void Configuration::initStorage() {
 	Serial.print("EEPROM Initializing...");
 	randomSeed(analogRead(0));
-	setDeviceId((unsigned short)random(0xFFFF));
 	setFormatVersion(CONFIG_CURRENT_FORMAT_VERSION);
+	setDeviceId((unsigned short)random(0xFFFF));
 	setSetCount(1);
 
 	mac[0] = 0x90;
