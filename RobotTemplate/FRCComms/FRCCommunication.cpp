@@ -40,6 +40,7 @@ void FRCCommunication::init() {
 int counter;
 bool FRCCommunication::newDataReady() {
 	int packetSize = socket.available(); // note that this includes the UDP header
+	bool droppedPacket = false;
 	packetSize -= 8; //subtract the 8 byte header;
 	if (packetSize == COMMAND_PACKET_SIZE) {
 		// read the packet into packetBufffer and get the senders IP addr and port number
@@ -86,6 +87,7 @@ bool FRCCommunication::newDataReady() {
 		socket.readPacket(garbage, packetSize, remoteIp, remotePort);
 		Serial.print("PacketSize:");
 		Serial.println(packetSize);
+		droppedPacket = true;
 	}
 
 	unsigned long now = millis();
@@ -97,7 +99,7 @@ bool FRCCommunication::newDataReady() {
 		commandData.mode.setEnabled(false);
 	}
 
-	rsl.update(isConnected, false, statusData.mode);
+	rsl.update(isConnected, droppedPacket, statusData.mode);
 
 	return false;
 }
