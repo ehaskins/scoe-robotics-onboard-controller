@@ -8,7 +8,10 @@
 #include "UserCode.h"
 #include <WProgram.h>
 #include "FRCComms\FRCCommunication.h"
+#include <Servo.h>
 
+Servo left;
+Servo right;
 /*
  * Guaranteed to be called after the following have been initialized:
  * Ethernet, configuration, serial, and FRCComms.
@@ -18,6 +21,8 @@
 void userInit(void) {
 	//Initialize user code, robot sensors, etc. here.
 
+	left.attach(8);
+	right.attach(9);
 	Serial.println("User init complete.");
 }
 
@@ -26,7 +31,12 @@ void userInit(void) {
  * between every call to commLoop.
  */
 void fastLoop(void) {
+	ControlData control = communication.controlData;
 	//Do fast loop stuff here.
+	if (!control.mode.getEnabled() || control.mode.getAutonomous()){
+		left.write(127);
+		right.write(127);
+	}
 }
 
 /*
@@ -36,8 +46,11 @@ void fastLoop(void) {
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void commLoop(void) {
+	ControlData control = communication.controlData;
 	//Serial.println((int)communication.commandData.joysticks[1].axis[1]);
 	//Serial.println("Slow loop: Implement me!");
+	left.write(control.joysticks[0].axis[0]);
+	right.write(control.joysticks[1].axis[0]);
 }
 
 /*
@@ -50,7 +63,7 @@ void commLoop(void) {
  * The elapsed argument is the number of milliseconds since the last execution.
  */
 void fixedLoop(int delayed, int elapsed){
-	Serial.print("Fixed loop delayed ");
+	/*Serial.print("Fixed loop delayed ");
 	Serial.print(delayed);
-	Serial.println("ms.");
+	Serial.println("ms.");*/
 }

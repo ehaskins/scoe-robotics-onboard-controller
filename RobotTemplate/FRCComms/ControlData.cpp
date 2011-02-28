@@ -5,7 +5,7 @@
  *      Author: EHaskins
  */
 
-#include "CommandData.h"
+#include "ControlData.h"
 #include "ByteReader.h"
 #include "CRC32.h"
 	/*CommandData::CommandData(){
@@ -15,7 +15,7 @@
 		}
 	}*/
 
-	void CommandData::parse(unsigned char data[]){
+	void ControlData::parse(unsigned char data[]){
 		//CommandData out;
 
 		int offset = 0;
@@ -37,8 +37,6 @@
 		fpgaChecksum3 = readUInt32(data, &offset);
 
 		//TODO:Read version.
-
-		//TODO:Verify Checksum
 
 		int crcOffset = COMMAND_PACKET_SIZE - 4;
 		int temp = crcOffset;

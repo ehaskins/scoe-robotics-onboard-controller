@@ -57,7 +57,7 @@ void Configuration::initStorage() {
 
 	teamNumber = 1692;
 
-	statusTransmitPort = 1150;
+	statusTransmitPort = 1110;
 	controlReceivePort = 1140;
 
 	writeData(0);
@@ -135,7 +135,7 @@ void Configuration::poll(void) {
 			if (deviceId == 0 || deviceId == getDeviceId()) {
 				Serial.println("Configuration discovery packet received.");
 
-				unsigned char response[] = { 0, 0, config.mac[0], config.mac[1],
+				unsigned char response[] = { 0, 0, CONFIG_RESPONSE_MAC, config.mac[0], config.mac[1],
 						config.mac[2], config.mac[3], config.mac[4],
 						config.mac[5] };
 				writeUInt16(response, getDeviceId(), 0);
@@ -151,7 +151,8 @@ void Configuration::poll(void) {
 				unsigned char responseData[CONFIG_DATA_SIZE + 3];
 
 				writeUInt16(responseData, getDeviceId(), 0);
-				responseData[2] = set;
+				responseData[2] = CONFIG_RESPONSE_DATA;
+				responseData[3] = set;
 				int offset = getSetOffset(set);
 				for (int i = 0; i < configDataLength; i++) {
 					responseData[i + 3] = EEPROM.read(i + offset);
@@ -169,14 +170,17 @@ void Configuration::poll(void) {
 				if (requestLength - requestOffset >= (int)CONFIG_DATA_SIZE) {
 					Serial.print("Updating configuration...");
 					unsigned char data[CONFIG_DATA_SIZE];
-					int temp = 2;
-					readBytes(requestData, data, CONFIG_DATA_SIZE, &temp);
+					readBytes(requestData, data, CONFIG_DATA_SIZE, &requestOffset);
 					loadData(data);
 					writeData(set);
 					sendResponse(true);
 				} else {
 					sendResponse(false);
 				}
+			}
+			else {
+				Serial.print("Write request received for device ");
+				Serial.println(deviceId);
 			}
 			break;
 		case 0x04:
@@ -191,7 +195,7 @@ void Configuration::poll(void) {
 	}
 }
 void Configuration::sendResponse(bool success) {
-	unsigned char responseData[3] = { 0, 0, success ? 1 : 0 };
+	unsigned char responseData[3] = { 0, 0, success ? CONFIG_RESPONSE_ACK : CONFIG_RESPONSE_NCK };
 	writeUInt16(responseData, getDeviceId(), 0);
 	socket.sendPacket(responseData, 3, broadcastIp, 1001);
 }

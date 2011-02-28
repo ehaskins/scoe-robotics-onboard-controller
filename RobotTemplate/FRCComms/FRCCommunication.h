@@ -8,7 +8,7 @@
 #ifndef FRCCOMMUNICATION_H_
 #define FRCCOMMUNICATION_H_
 
-#include "CommandData.h"
+#include "ControlData.h"
 #include "StatusData.h"
 #include "RobotStatusLight.h"
 #include "Udp.h"
@@ -31,7 +31,7 @@ public:
 
 	bool isConnected;
 	bool isEStoped;
-	CommandData commandData;
+	ControlData controlData;
 	StatusData statusData;
 	RobotStatusLight rsl;
 	unsigned long lastPacketReceivedTime;

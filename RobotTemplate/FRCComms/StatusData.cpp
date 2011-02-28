@@ -9,7 +9,7 @@
 #include "ByteWriter.h"
 #include "Configuration.h"
 #include "CRC32.h"
-void StatusData::updateResponse(CommandData *data) {
+void StatusData::updateResponse(ControlData *data) {
 	replyId = data->packetId;
 	mode = data->mode;
 }
