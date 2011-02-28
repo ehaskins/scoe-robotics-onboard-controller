@@ -22,6 +22,11 @@ static const int CONFIG_PACKET_HEADER_LENGTH = 3;
 static const unsigned int CONFIG_PACKET_LENGTH = CONFIG_PACKET_HEADER_LENGTH + CONFIG_DATA_SIZE;
 static const unsigned int CONFIG_MAX_RX = 512;
 
+static const unsigned char CONFIG_RESPONSE_NCK = 0;
+static const unsigned char CONFIG_RESPONSE_ACK = 1;
+static const unsigned char CONFIG_RESPONSE_MAC = 2;
+static const unsigned char CONFIG_RESPONSE_DATA = 3;
+
 struct Configuration {
 private:
 	unsigned char broadcastIp[4];

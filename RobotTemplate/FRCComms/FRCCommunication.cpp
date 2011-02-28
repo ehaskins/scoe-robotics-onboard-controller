@@ -6,7 +6,7 @@
  */
 
 #include "FRCCommunication.h"
-#include "CommandData.h"
+#include "ControlData.h"
 #include <Ethernet.h>
 #include <Udp.h>
 #include "..\UserConstants.h"
@@ -48,15 +48,15 @@ bool FRCCommunication::newDataReady() {
 
 		lastPacketReceivedTime = millis();
 
-		commandData.parse(commandBytes);
+		controlData.parse(commandBytes);
 
-		if (!commandData.isValid){
+		if (!controlData.isValid){
 			isConnected = false;
 			Serial.println("Invalid packet received.");
 		}
 
 		//Implement E-Stop safety
-		if (commandData.mode.getEStop()){
+		if (controlData.mode.getEStop()){
 			if (!isEStoped){
 				Serial.println("E-STOP SET");
 			}
@@ -64,20 +64,20 @@ bool FRCCommunication::newDataReady() {
 		}
 
 		if (isEStoped){
-			commandData.mode.setEStop(true);
-			commandData.mode.setEnabled(false);
+			controlData.mode.setEStop(true);
+			controlData.mode.setEnabled(false);
 		}
 
-		if (statusData.replyId > commandData.packetId && !commandData.mode.getResync()){
+		if (statusData.replyId > controlData.packetId && !controlData.mode.getResync()){
 			Serial.print("Lower packet ID without resync: PacketID:");
-			Serial.print(commandData.packetId);
+			Serial.print(controlData.packetId);
 			Serial.print(" Reply Id:");
 			Serial.println(statusData.replyId);
 			isConnected = false;
 		}
 		else{
-			statusData.replyId = commandData.packetId;
-			statusData.mode = commandData.mode;
+			statusData.replyId = controlData.packetId;
+			statusData.mode = controlData.mode;
 		}
 		return true;
 	}
@@ -96,7 +96,7 @@ bool FRCCommunication::newDataReady() {
 	}
 
 	if (!isConnected){
-		commandData.mode.setEnabled(false);
+		controlData.mode.setEnabled(false);
 	}
 
 	rsl.update(isConnected, droppedPacket, statusData.mode);
@@ -107,7 +107,7 @@ bool FRCCommunication::newDataReady() {
 void FRCCommunication::sendData() {
 	counter++;
 
-	isConnected = !commandData.mode.getResync();
+	isConnected = !controlData.mode.getResync();
 	statusData.getResponseBytes(statusBytes);
 	socket.sendPacket(statusBytes, STATUS_PACKET_SIZE, remoteIp, config.statusTransmitPort);
 }
