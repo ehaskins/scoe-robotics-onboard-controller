@@ -10,6 +10,7 @@
 #include "FRCComms\FRCCommunication.h"
 #include <Servo.h>
 
+bool attached;
 Servo left;
 Servo right;
 /*
@@ -21,8 +22,6 @@ Servo right;
 void userInit(void) {
 	//Initialize user code, robot sensors, etc. here.
 
-	left.attach(8);
-	right.attach(9);
 	Serial.println("User init complete.");
 }
 
@@ -33,24 +32,61 @@ void userInit(void) {
 void fastLoop(void) {
 	ControlData control = communication.controlData;
 	//Do fast loop stuff here.
-	if (!control.mode.getEnabled() || control.mode.getAutonomous()){
-		left.write(127);
-		right.write(127);
+
+	if (!communication.isConnected) {
+		setOutputsEnabled(false);
 	}
 }
 
+void setOutputsEnabled(bool enabled) {
+	if (enabled && !attached) {
+		left.attach(8);
+		right.attach(9);
+		attached = true;
+	} else if (!enabled && attached) {
+		left.detach();
+		right.detach();
+		attached = false;
+	}
+}
+unsigned char position = 127;
+unsigned char direction = 1;
 /*
  * Process control data here.
  * This code is called every time new control data is received.
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
+int commCounter;
 void commLoop(void) {
 	ControlData control = communication.controlData;
 	//Serial.println((int)communication.commandData.joysticks[1].axis[1]);
 	//Serial.println("Slow loop: Implement me!");
-	left.write(control.joysticks[0].axis[0]);
-	right.write(control.joysticks[1].axis[0]);
+	if (control.mode.getEnabled()) {
+		setOutputsEnabled(true);
+		if (control.mode.getAutonomous()) {
+			left.write(255 - position);
+			right.write(position);
+
+			//if (commCounter % 5 == 0){
+			position += direction;
+			Serial.println((int) position);
+			//}
+			if (position <= 100 || position >= 154) {
+				direction *= -1;
+				//position = 100;
+			}
+		} else {
+			left.write(control.joysticks[0].axis[0]);
+			right.write(control.joysticks[1].axis[0]);
+			/*left.write(127);
+			 right.write(127);*/
+		}
+	}
+	else{
+		setOutputsEnabled(false);
+	}
+	commCounter++;
 }
 
 /*
@@ -62,8 +98,8 @@ void commLoop(void) {
  *
  * The elapsed argument is the number of milliseconds since the last execution.
  */
-void fixedLoop(int delayed, int elapsed){
+void fixedLoop(int delayed, int elapsed) {
 	/*Serial.print("Fixed loop delayed ");
-	Serial.print(delayed);
-	Serial.println("ms.");*/
+	 Serial.print(delayed);
+	 Serial.println("ms.");*/
 }
