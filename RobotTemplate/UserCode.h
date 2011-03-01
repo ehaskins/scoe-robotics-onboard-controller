@@ -13,5 +13,5 @@ void fastLoop(void);
 void commLoop(void);
 void fixedLoop(int delayed, int elapsed);
 void userInit(void);
-
+void setOutputsEnabled(bool enabled);
 #endif /* USERCODE_H_ */
