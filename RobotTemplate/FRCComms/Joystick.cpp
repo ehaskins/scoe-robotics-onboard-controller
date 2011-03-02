@@ -6,7 +6,7 @@
  */
 #include "Joystick.h"
 #include "ByteReader.h"
-
+#include <WProgram.h>
 void Joystick::parse(unsigned char data[], int *offset) {
 	for (int i = 0; i < NUM_AXES; i++){
 		axis[i] = readUInt8(data, offset);
