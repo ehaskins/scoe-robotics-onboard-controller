@@ -43,7 +43,7 @@
 */
 
 #include <avr/interrupt.h>
-#include <WProgram.h> 
+#include "WProgram.h"
 
 #include "Servo.h"
 
@@ -287,9 +287,9 @@ void Servo::write(int value)
 {  
   if(value < MIN_PULSE_WIDTH)
   {  // treat values less than 544 as angles in degrees (valid values in microseconds are handled as microseconds)
-    if(value < 0) value = 0;
-    if(value > 255) value = 255;
-    value = map(value, 0, 255, SERVO_MIN(),  SERVO_MAX());
+    if(value < -128) value = -128;
+    if(value > 127) value = 127;
+    value = map(value, -128, 127, SERVO_MIN(),  SERVO_MAX());
   }
   this->writeMicroseconds(value);
 }
@@ -317,7 +317,7 @@ void Servo::writeMicroseconds(int value)
 
 int Servo::read() // return the value as degrees
 {
-  return  map( this->readMicroseconds()+1, SERVO_MIN(), SERVO_MAX(), 0, 255);
+  return  map( this->readMicroseconds()+1, SERVO_MIN(), SERVO_MAX(), -128, 127);
 }
 
 int Servo::readMicroseconds()

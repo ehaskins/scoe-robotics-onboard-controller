@@ -49,8 +49,7 @@ void setOutputsEnabled(bool enabled) {
 		attached = false;
 	}
 }
-unsigned char position = 127;
-unsigned char direction = 1;
+
 /*
  * Process control data here.
  * This code is called every time new control data is received.
@@ -58,6 +57,10 @@ unsigned char direction = 1;
  * actual rate will be less than 50hz, and not guaranteed.
  */
 int commCounter;
+int start = 0;
+int position = 0;
+int direction = 1;
+int range = 40;
 void commLoop(void) {
 	ControlData control = communication.controlData;
 	//Serial.println((int)communication.commandData.joysticks[1].axis[1]);
@@ -65,22 +68,36 @@ void commLoop(void) {
 	if (control.mode.getEnabled()) {
 		setOutputsEnabled(true);
 		if (control.mode.getAutonomous()) {
-			left.write(255 - position);
+			left.write(-position);
 			right.write(position);
 
-			//if (commCounter % 5 == 0){
 			position += direction;
-			Serial.println((int) position);
-			//}
-			if (position <= 100 || position >= 154) {
+			if (position <= start - range || position >= start + range) {
 				direction *= -1;
-				//position = 100;
+				//position = 0;
 			}
+
 		} else {
-			left.write(control.joysticks[0].axis[0]);
-			right.write(control.joysticks[1].axis[0]);
-			/*left.write(127);
-			 right.write(127);*/
+			int leftVal = control.joysticks[0].axis[1] - 128;
+			int rightVal = control.joysticks[0].axis[4] - 128;
+
+			//Deadband to remove the non-centered stick issues. 360 requires a big deadband.
+			leftVal = deadband(leftVal, 25);
+			rightVal = deadband(rightVal, 25);
+
+			//Scale to range BoeBot servos respond.
+			leftVal = leftVal * 40 / 127;
+			rightVal = rightVal * 40 / 127;
+
+			if(commCounter % 5 == 0){
+				Serial.print("Left:");
+				Serial.print(leftVal);
+				Serial.print(" Right:");
+				Serial.println(rightVal);
+			}
+
+			left.write(-leftVal);
+			right.write(rightVal);
 		}
 	}
 	else{
@@ -88,7 +105,20 @@ void commLoop(void) {
 	}
 	commCounter++;
 }
-
+int deadband(int value, int deadband){
+	if (value < 127-deadband && value > -128+deadband){
+		if (value > deadband){
+			value -= deadband;
+		}
+		else if (value < -deadband){
+			value += deadband;
+		}
+		else{
+			value = 0;
+		}
+	}
+	return value;
+}
 /*
  * Will be called at the frequency specified in UserConstants.h.
  * Guaranteed to be accurate over time, but inaccurate in the short term.
