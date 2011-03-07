@@ -16,7 +16,7 @@
 const static int STATUS_HEADER_SIZE = 32;
 const static int STATUS_PACKET_SIZE = STATUS_HEADER_SIZE + USER_STATUS_DATA_SIZE + 8;
 
-struct StatusData {
+class StatusData {
 public:
 	Mode mode;
 	unsigned int replyId;

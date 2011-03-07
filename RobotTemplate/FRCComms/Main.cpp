@@ -43,7 +43,7 @@ void setup() {
 	}
 	Serial.println();
 	config.netInit();
-	communication.init();
+	comm.init();
 
 	userInit();
 
@@ -55,9 +55,9 @@ unsigned long nextLoopTime = 0;
 unsigned long fixedLoopPeriod = 0;
 void loop() {
 	config.poll();
-	if (communication.newDataReady()){
+	if (comm.newDataReady()){
 		commLoop();
-		communication.sendData();
+		comm.sendData();
 	}
 	unsigned long now = millis();
 	if (nextLoopTime == 0)
