@@ -15,7 +15,8 @@ const int NUM_JOYSTICKS = 4;
 const static int COMMAND_HEADER_SIZE = 80;
 const static int COMMAND_PACKET_SIZE = COMMAND_HEADER_SIZE + USER_CONTROL_DATA_SIZE + 8;
 
-struct ControlData {
+class ControlData {
+public:
 	void parse(unsigned char[]);
 
 	unsigned short packetId;

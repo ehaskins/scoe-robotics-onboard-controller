@@ -40,5 +40,5 @@ public:
 	unsigned char statusBytes[STATUS_PACKET_SIZE];
 };
 
-extern FRCCommunication communication;
+extern FRCCommunication comm;
 #endif /* FRCCOMMUNICATION_H_ */

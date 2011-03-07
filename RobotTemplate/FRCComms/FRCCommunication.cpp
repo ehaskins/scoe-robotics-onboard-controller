@@ -11,7 +11,7 @@
 #include <Udp.h>
 #include "..\UserConstants.h"
 #include "Configuration.h"
-FRCCommunication communication;
+FRCCommunication comm;
 
 byte remoteIp[4]; // holds received packet's originating IP
 unsigned int remotePort; // holds received packet's originating port
@@ -21,7 +21,7 @@ void FRCCommunication::init() {
 	rsl.init(13);
 	Serial.print("FRCComm socket #");
 	Serial.println(socket.begin(config.controlReceivePort));
-	communication.statusData.teamNumber = config.teamNumber;
+	comm.statusData.teamNumber = config.teamNumber;
 	Serial.print("Control User Data ");
 	Serial.print(USER_CONTROL_DATA_SIZE);
 	Serial.print("bytes, with a total size of ");
