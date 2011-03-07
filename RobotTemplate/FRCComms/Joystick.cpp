@@ -9,7 +9,7 @@
 #include <WProgram.h>
 void Joystick::parse(unsigned char data[], int *offset) {
 	for (int i = 0; i < NUM_AXES; i++){
-		axis[i] = readUInt8(data, offset);
+		axis[i] = readUInt8(data, offset) - 128;
 	}
 	buttons.data = readUInt16(data, offset);
 }
