@@ -7,12 +7,10 @@
 
 #include "UserCode.h"
 #include <WProgram.h>
-#include "FRCComms\FRCCommunication.h"
+#include <FrcComms\FRCCommunication.h>
 #include <Servo.h>
+#include "Utils.h"
 
-bool attached;
-Servo left;
-Servo right;
 
 /*
  * Guaranteed to be called after the following have been initialized:
@@ -20,8 +18,17 @@ Servo right;
  *
  * Place any one time robot specific initialization code here.
  */
-void userInit(void) {
+void UserRobot::userInit(void) {
 	//Initialize user code, robot sensors, etc. here.
+
+	start = 0;
+	position = 0;
+	direction = 1;
+	range = 40;
+
+	autoInitComplete = false;
+	teleInitComplete = false;
+	disabledInitComplete = false;
 
 	Serial.println("User init complete.");
 }
@@ -29,7 +36,7 @@ void userInit(void) {
 /*
  * Disabled and enables all outputs. Must be implemented or a disabled robot may behave irratically.
  */
-void setOutputsEnabled(bool enabled) {
+void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
 		left.attach(8);
 		right.attach(9);
@@ -46,19 +53,17 @@ void setOutputsEnabled(bool enabled) {
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void teleopInit(){
+void UserRobot::teleopInit(){
 
 }
-
-int teleopCounter;
 /*
  * Process teleop control data here.
  * This code is called every time new control data is received.
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void teleopLoop(){
-	Joystick stick = comm.controlData.joysticks[0];
+void UserRobot::teleopLoop(){
+	Joystick stick = comm->controlData->joysticks[0];
 	int leftVal = stick.axis[1] - 128;
 	int rightVal = stick.axis[4] - 128;
 
@@ -88,7 +93,7 @@ void teleopLoop(){
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void disabledInit(){
+void UserRobot::disabledInit(){
 
 }
 /*
@@ -97,7 +102,7 @@ void disabledInit(){
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void disabledLoop(){
+void UserRobot::disabledLoop(){
 
 }
 
@@ -106,22 +111,18 @@ void disabledLoop(){
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void autonomousInit(){
+void UserRobot::autonomousInit(){
 
 }
 
-int start = 0;
-int position = 0;
-int direction = 1;
-int range = 40;
-int autonomousCounter;
+
 /*
  * Process autonomous control data here.
  * This code is called every time new control data is received.
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void autonomousLoop(){
+void UserRobot::autonomousLoop(){
 	left.write(-position);
 	right.write(position);
 
@@ -143,7 +144,7 @@ void autonomousLoop(){
  *
  * The elapsed argument is the number of milliseconds since the last execution.
  */
-void fixedLoop(int delayed, int elapsed) {
+void UserRobot::fixedLoop(int delayed, int elapsed) {
 	/*Serial.print("Fixed loop delayed ");
 	 Serial.print(delayed);
 	 Serial.println("ms.");*/
@@ -153,18 +154,16 @@ void fixedLoop(int delayed, int elapsed) {
  * Called as fast as possible. Guaranteed to be called at least once
  * between every call to commLoop.
  */
-void fastLoop(void) {
-	ControlData control = comm.controlData;
+void UserRobot::fastLoop(void) {
+	ControlData *control = comm->controlData;
 	//Do fast loop stuff here.
 
-	if (!comm.isConnected) {
+	if (!comm->isConnected) {
 		setOutputsEnabled(false);
 	}
 }
 
-bool autoInitComplete = false;
-bool teleInitComplete = false;
-bool disabledInitComplete = false;
+
 
 /*
  * Processes control data here, and calls the appropriate init and/or loop functions.
@@ -172,12 +171,12 @@ bool disabledInitComplete = false;
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void commLoop(void) {
+void UserRobot::commLoop(void) {
 	//Serial.println((int)communication.commandData.joysticks[1].axis[1]);
 	//Serial.println("Slow loop: Implement me!");
-	if (comm.controlData.mode.getEnabled()) {
+	if (comm->controlData->mode.getEnabled()) {
 		setOutputsEnabled(true);
-		if (comm.controlData.mode.getAutonomous()) {
+		if (comm->controlData->mode.getAutonomous()) {
 			if (!autoInitComplete){
 				autonomousInit();
 				autoInitComplete = true;
@@ -205,19 +204,4 @@ void commLoop(void) {
 		}
 		disabledLoop();
 	}
-}
-
-int deadband(int value, int deadband){
-	if (value < 127-deadband && value > -128+deadband){
-		if (value > deadband){
-			value -= deadband;
-		}
-		else if (value < -deadband){
-			value += deadband;
-		}
-		else{
-			value = 0;
-		}
-	}
-	return value;
 }
