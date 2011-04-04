@@ -18,6 +18,7 @@ const int PACKET_LOSS_TIMEOUT = 1000;
 
 struct FRCCommunication{
 private:
+	int counter;
 	static FRCCommunication *instance;
 	UdpClass socket;
 	Configuration *config;

@@ -45,11 +45,13 @@ void FRCCommunication::init() {
 	Serial.println(config->statusTransmitPort);
 }
 
-int counter;
 bool FRCCommunication::newDataReady() {
+	counter++;
 	int packetSize = socket.available(); // note that this includes the UDP header
 	bool droppedPacket = false;
 	packetSize -= 8; //subtract the 8 byte header;
+
+	rsl.update(isConnected, droppedPacket, statusData->mode);
 	if (packetSize == CONTROL_PACKET_SIZE) {
 		// read the packet into packetBufffer and get the senders IP addr and port number
 		socket.readPacket((char *)commandBytes, CONTROL_PACKET_SIZE, remoteIp, remotePort);
@@ -107,14 +109,10 @@ bool FRCCommunication::newDataReady() {
 		controlData->mode.setEnabled(false);
 	}
 
-	rsl.update(isConnected, droppedPacket, statusData->mode);
-
 	return false;
 }
 
 void FRCCommunication::sendData() {
-	counter++;
-
 	isConnected = !controlData->mode.getResync();
 	statusData->getResponseBytes(statusBytes);
 	socket.sendPacket(statusBytes, STATUS_PACKET_SIZE, remoteIp, config->statusTransmitPort);
