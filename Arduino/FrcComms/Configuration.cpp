@@ -137,7 +137,7 @@ void Configuration::poll(void) {
 		requestOffset++;
 		unsigned short deviceId = readUInt16(requestData, &requestOffset);
 		switch (command) {
-		case 0x01:
+		case 0x01://Discovery
 			if (deviceId == 0 || deviceId == getDeviceId()) {
 				Serial.println("Configuration discovery packet received.");
 
@@ -148,7 +148,7 @@ void Configuration::poll(void) {
 				socket.sendPacket(response, 8, broadcastIp, 1001);
 			}
 			break;
-		case 0x02:
+		case 0x02: //Read data at slot x
 			if (deviceId == 0 || deviceId == getDeviceId()) {
 				unsigned char set = requestData[requestOffset];
 				requestOffset++;
@@ -168,7 +168,7 @@ void Configuration::poll(void) {
 						broadcastIp, 1001);
 			}
 			break;
-		case 0x03:
+		case 0x03: //Write data to slot x
 			if (deviceId == getDeviceId()) {
 				unsigned char set = requestData[requestOffset];
 				requestOffset++;
@@ -189,7 +189,7 @@ void Configuration::poll(void) {
 				Serial.println(deviceId);
 			}
 			break;
-		case 0x04:
+		case 0x04: //Reset EEPROM
 			if (deviceId == getDeviceId()) {
 				Serial.println("Configuration reset command received.");
 				setFormatVersion(0);
