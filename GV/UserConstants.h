@@ -27,6 +27,6 @@ const int FIXED_LOOP_FREQUENCY = 1;
 #define USER_INVERT_REAR_MOTOR	false
 
 // The maximum shift in motor speed between timesteps.
-#define USER_MAX_SHIFT			0.1f
+#define USER_MAX_SHIFT			1.0f
 
 #endif
