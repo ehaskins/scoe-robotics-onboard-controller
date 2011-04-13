@@ -5,7 +5,9 @@
  *      Author: EHaskins
  */
 
-int deadband(int value, int deadband){
+#include "Utils.h"
+
+int deadband(int value, int deadband) {
 	if (value < 127-deadband && value > -128+deadband){
 		if (value > deadband){
 			value -= deadband;
@@ -18,4 +20,12 @@ int deadband(int value, int deadband){
 		}
 	}
 	return value;
+}
+
+int restrict(int oldValue, int newValue, int maxShift) {
+	int shift = min(abs(maxShift), abs(newValue - oldValue));
+	if (newValue < oldValue) {
+		shift = -shift;
+	}
+	return oldValue + shift;
 }
