@@ -10,7 +10,7 @@
 #include <FrcComms\FRCCommunication.h>
 #include <Servo.h>
 #include "Utils.h"
-
+#include "UserConstants.h"
 
 /*
  * Guaranteed to be called after the following have been initialized:
@@ -20,15 +20,31 @@
  */
 void UserRobot::userInit(void) {
 	//Initialize user code, robot sensors, etc. here.
-
-	start = 0;
-	position = 0;
-	direction = 1;
-	range = 40;
-
 	autoInitComplete = false;
 	teleInitComplete = false;
 	disabledInitComplete = false;
+
+	// Initialize the robot parts.
+	leftMotor.init(PIN_LEFT_MOTOR);
+	rightMotor.init(PIN_RIGHT_MOTOR);
+	rearMotor.init(PIN_REAR_MOTOR);
+
+	leftMotor.setInverted(USER_INVERT_LEFT_MOTOR);
+	rightMotor.setInverted(USER_INVERT_RIGHT_MOTOR);
+	rearMotor.setInverted(USER_INVERT_REAR_MOTOR);
+
+	leftLimitMotor.init(&leftMotor);
+	rightLimitMotor.init(&rightMotor);
+	rearLimitMotor.init(&rearMotor);
+
+	leftLimitMotor.setMaxShift(USER_MAX_SHIFT);
+	rightLimitMotor.setMaxShift(USER_MAX_SHIFT);
+	rearLimitMotor.setMaxShift(USER_MAX_SHIFT);
+
+	kiwidrive.init((IMotor*)&leftLimitMotor, (IMotor*)&rightLimitMotor, (IMotor*)&rearLimitMotor);
+	kiwidrive.invertForward(USER_INVERT_FORWARD);
+	kiwidrive.invertStrafe(USER_INVERT_STRAFE);
+	kiwidrive.invertYaw(USER_INVERT_YAW);
 
 	Serial.println("User init complete.");
 }
@@ -38,12 +54,15 @@ void UserRobot::userInit(void) {
  */
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
-		left.attach(8);
-		right.attach(9);
+		leftMotor.setEnabled(true);
+		rightMotor.setEnabled(true);
+		rearMotor.setEnabled(true);
+		leftLimitMotor
 		attached = true;
 	} else if (!enabled && attached) {
-		left.detach();
-		right.detach();
+		leftMotor.setEnabled(false);
+		rightMotor.setEnabled(false);
+		rearMotor.setEnabled(false);
 		attached = false;
 	}
 }
@@ -54,8 +73,18 @@ void UserRobot::setOutputsEnabled(bool enabled) {
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::teleopInit(){
-
+	setOutputsEnabled(true);
 }
+
+enum XboxJoysticks {
+	LEFT_X = 0,
+	LEFT_Y = 1,
+	LR_ANALOG = 2,
+	RIGHT_X = 3,
+	RIGHT_Y = 4
+};
+
+
 /*
  * Process teleop control data here.
  * This code is called every time new control data is received.
@@ -63,29 +92,22 @@ void UserRobot::teleopInit(){
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void UserRobot::teleopLoop(){
+	// Get the control stick.
 	Joystick stick = comm->controlData->joysticks[0];
-	int leftVal = stick.axis[1] - 128;
-	int rightVal = stick.axis[4] - 128;
 
-	//Deadband to remove the non-centered stick issues. 360 controller requires a big deadband.
-	leftVal = deadband(leftVal, 25);
-	rightVal = deadband(rightVal, 25);
+	// Re-center the control axes.
+	int forward = stick.axis[LEFT_Y] - 128;
+	int strafe = stick.axis[LEFT_X] - 128;
+	int rotate = stick.axis[RIGHT_X] - 128;
 
-	//Scale to range BoeBot servos respond.
-	leftVal = leftVal * 40 / 127;
-	rightVal = rightVal * 40 / 127;
+	// Deadband to remove the non-centered stick issues. 360 controller requires a big deadband.
+	forward = deadband(forward, 25);
+	strafe = deadband(strafe, 25);
+	rotate = deadband(rotate, 25);
 
-	if(teleopCounter % 5 == 0){
-		Serial.print("Left:");
-		Serial.print(leftVal);
-		Serial.print(" Right:");
-		Serial.println(rightVal);
-	}
-
-	left.write(-leftVal);
-	right.write(rightVal);
-
-	teleopCounter++;
+	// Drive the damn robot.
+	float controls[] = { forward, strafe, rotate };
+	kiwidrive.driveSystem(controls);
 }
 
 /*
@@ -94,7 +116,7 @@ void UserRobot::teleopLoop(){
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::disabledInit(){
-
+	setOutputsEnabled(false);
 }
 /*
  * Process disabled control data here.
@@ -112,7 +134,7 @@ void UserRobot::disabledLoop(){
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::autonomousInit(){
-
+	setOutputsEnabled(false);
 }
 
 
@@ -123,16 +145,7 @@ void UserRobot::autonomousInit(){
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void UserRobot::autonomousLoop(){
-	left.write(-position);
-	right.write(position);
 
-	position += direction;
-	if (position <= start - range || position >= start + range) {
-		direction *= -1;
-		//position = 0;
-	}
-
-	autonomousCounter++;
 }
 
 /*
@@ -145,9 +158,7 @@ void UserRobot::autonomousLoop(){
  * The elapsed argument is the number of milliseconds since the last execution.
  */
 void UserRobot::fixedLoop(int delayed, int elapsed) {
-	/*Serial.print("Fixed loop delayed ");
-	 Serial.print(delayed);
-	 Serial.println("ms.");*/
+
 }
 
 /*
