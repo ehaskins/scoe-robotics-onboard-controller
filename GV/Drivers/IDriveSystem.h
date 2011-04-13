@@ -13,7 +13,6 @@
 
 class IDriveSystem : public IDevice {
 public:
-	virtual ~IDriveSystem() = 0;
 
 	/**
 	 * Gets the number of motors in the drive system.

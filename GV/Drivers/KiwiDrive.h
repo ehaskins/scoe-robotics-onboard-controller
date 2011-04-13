@@ -8,6 +8,7 @@
 #ifndef KIWIDRIVE_H_
 #define KIWIDRIVE_H_
 
+#include "Drivers.h"
 #include "IDriveSystem.h"
 #include <string.h>
 
@@ -41,8 +42,8 @@ private:
 	}
 
 public:
-	KiwiDrive() :m_pLeftMotor(NULL), m_pRightMotor(NULL), m_pRearMotor(NULL), m_invertForward(false), m_invertStrafe(false), m_invertYaw(false) {}
-	~KiwiDrive() {}
+	KiwiDrive()
+	:m_pLeftMotor(NULL), m_pRightMotor(NULL), m_pRearMotor(NULL), m_invertForward(false), m_invertStrafe(false), m_invertYaw(false) {}
 
 	void init(int port) {}
 	void init(IMotor* left, IMotor* right, IMotor* rear) {
@@ -69,9 +70,15 @@ public:
 	bool driveMotor(int motor, float value);
 	void driveSystem(float* axisVector);
 
-	void invertStrafe(bool invert);
-	void invertForward(bool invert);
-	void invertYaw(bool invert);
+	void invertStrafe(bool invert) {
+		m_invertStrafe = invert;
+	}
+	void invertForward(bool invert) {
+		m_invertForward = invert;
+	}
+	void invertYaw(bool invert) {
+		m_invertYaw = invert;
+	}
 };
 
 #endif /* KIWIDRIVE_H_ */

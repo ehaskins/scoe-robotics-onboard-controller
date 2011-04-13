@@ -14,8 +14,6 @@
 
 class IDevice {
 public:
-	virtual ~IDevice() = 0;
-
 	virtual void init(int port) = 0;
 
 	virtual void setEnabled(bool enable) = 0;

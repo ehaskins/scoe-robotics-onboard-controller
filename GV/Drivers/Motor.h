@@ -28,7 +28,6 @@ private:
 public:
 	Motor()
 	:m_pwmPort(NO_PORT), m_enabled(false), m_idle(0.0f), m_minBound(-1.0f), m_maxBound(1.0f), m_inverted(false) {}
-	virtual ~Motor() {}
 
 	void setIdleSpeed(float idle) {
 		m_idle = idle;

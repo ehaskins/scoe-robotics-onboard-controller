@@ -12,7 +12,6 @@
 
 class IMotor : public IDevice {
 public:
-	virtual ~IMotor() = 0;
 
 	/**
 	 * Sets the upper and lower bounds of the motor's operating range.

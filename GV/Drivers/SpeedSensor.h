@@ -23,7 +23,6 @@ private:
 
 public:
 	SpeedSensor() :m_enabled(false), m_pEncoder(NULL) { m_lastTimeStep = millis(); }
-	virtual ~SpeedSensor() {}
 
 	void init(IEncoder* encoder) {
 		m_pEncoder = encoder;

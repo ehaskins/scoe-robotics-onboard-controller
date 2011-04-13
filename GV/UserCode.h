@@ -24,28 +24,6 @@ private:
 	Configuration *config;
 	FRCCommunication *comm;
 
-	// Drive motors and PID controllers.
-	static Motor leftMotor;
-	static Motor rightMotor;
-	static Motor rearMotor;
-
-	static LimitMotor leftLimitMotor;
-	static LimitMotor rightLimitMotor;
-	static LimitMotor rearLimitMotor;
-
-	// Drive encoders.
-//	static Encoder leftEncoder;
-//	static Encoder rightEncoder;
-//	static Encoder rearEncoder;
-
-	// Drive speed sensors.
-//	static SpeedSensor leftSensor;
-//	static SpeedSensor rightSensor;
-//	static SpeedSensor rearSensor;
-
-	// Drive system.
-	static KiwiDrive kiwidrive;
-
 public:
 	void fastLoop(void);
 	void commLoop(void);

@@ -12,7 +12,6 @@
 
 class ISpeedSensor : public IDevice {
 public:
-	virtual ~ISpeedSensor() = 0;
 
 	virtual float getSpeed() = 0;
 };
