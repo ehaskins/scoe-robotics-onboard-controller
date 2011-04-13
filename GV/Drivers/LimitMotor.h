@@ -21,7 +21,6 @@ private:
 
 public:
 	LimitMotor() :m_pMotor(NULL), m_lastOutput(0.0f), m_maxShift(0.1f), m_idle(0.0f) {}
-	~LimitMotor() {}
 
 	void init(int port) {}
 	void init(IMotor* motor) {

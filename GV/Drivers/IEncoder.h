@@ -18,7 +18,6 @@ typedef enum {
 
 class IEncoder : public IDevice {
 public:
-	virtual ~IEncoder() = 0;
 
 	/**
 	 * Initializes the two required interrupts for the controller.

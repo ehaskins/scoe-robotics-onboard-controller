@@ -10,6 +10,8 @@
 #include <Servo.h>
 #include <FrcComms\Configuration.h>
 #include <FrcComms\FRCCommunication.h>
+#include "Drivers/Drivers.h"
+
 //Declared and initialized in main.
 class UserRobot
 {

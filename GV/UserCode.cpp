@@ -12,6 +12,28 @@
 #include "Utils.h"
 #include "UserConstants.h"
 
+// Drive motors and PID controllers.
+static Motor leftMotor;
+static Motor rightMotor;
+static Motor rearMotor;
+
+static LimitMotor leftLimitMotor;
+static LimitMotor rightLimitMotor;
+static LimitMotor rearLimitMotor;
+
+// Drive encoders.
+//	static Encoder leftEncoder;
+//	static Encoder rightEncoder;
+//	static Encoder rearEncoder;
+
+// Drive speed sensors.
+//	static SpeedSensor leftSensor;
+//	static SpeedSensor rightSensor;
+//	static SpeedSensor rearSensor;
+
+// Drive system.
+static KiwiDrive kiwidrive;
+
 /*
  * Guaranteed to be called after the following have been initialized:
  * Ethernet, configuration, serial, and FRCComms.
@@ -54,15 +76,10 @@ void UserRobot::userInit(void) {
  */
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
-		leftMotor.setEnabled(true);
-		rightMotor.setEnabled(true);
-		rearMotor.setEnabled(true);
-		leftLimitMotor
+		kiwidrive.setEnabled(true);
 		attached = true;
 	} else if (!enabled && attached) {
-		leftMotor.setEnabled(false);
-		rightMotor.setEnabled(false);
-		rearMotor.setEnabled(false);
+		kiwidrive.setEnabled(false);
 		attached = false;
 	}
 }

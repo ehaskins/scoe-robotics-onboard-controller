@@ -24,7 +24,6 @@ private:
 public:
 	Encoder()
 	:m_enabled(false), m_dirPort(NO_PORT), m_tickINT(NO_PORT), m_tickCount(0) {}
-	~Encoder() {}
 
 	void init(int port) {}
 	void init(int dirPort, int tickINT) {

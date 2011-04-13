@@ -24,7 +24,6 @@ private:
 public:
 	PIDMotor()
 	:m_enabled(false), m_pid(0.0f), m_pMotor(NULL), m_pSpeedSensor(NULL) {}
-	virtual ~PIDMotor() {}
 
 	void init(int port) {}
 	void init(IMotor* baseMotor, ISpeedSensor* baseSensor, float idle = 0.0f) {
