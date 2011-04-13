@@ -122,8 +122,12 @@ void UserRobot::teleopLoop(){
 	strafe = deadband(strafe, 25);
 	rotate = deadband(rotate, 25);
 
+	float fwdFloat = (float)forward * 12.0f / 127.0f;
+	float strFloat = (float)strafe * 12.0f / 127.0f;
+	float rotFloat = (float)rotate * 12.0f / 127.0f;
+
 	// Drive the damn robot.
-	float controls[] = { forward, strafe, rotate };
+	float controls[] = { fwdFloat, strFloat, rotFloat };
 	kiwidrive.driveSystem(controls);
 }
 
