@@ -9,4 +9,5 @@
 #define UTILS_H_
 
 int deadband(int value, int deadband);
+int limit(int value, int min, int max);
 #endif /* UTILS_H_ */

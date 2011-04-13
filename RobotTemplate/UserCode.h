@@ -27,8 +27,13 @@ private:
 	bool disabledInitComplete;
 
 	bool attached;
-	Servo left;
-	Servo right;
+	Servo pan;
+	Servo tilt;
+	Servo nw;
+	Servo ne;
+	Servo sw;
+	Servo se;
+
 	Configuration *config;
 	FRCCommunication *comm;
 public:

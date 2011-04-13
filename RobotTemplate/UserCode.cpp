@@ -38,12 +38,20 @@ void UserRobot::userInit(void) {
  */
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
-		left.attach(8);
-		right.attach(9);
+		nw.attach(8);
+		ne.attach(9);
+		sw.attach(10);
+		se.attach(11);
+		pan.attach(12);
+		tilt.attach(13);
 		attached = true;
 	} else if (!enabled && attached) {
-		left.detach();
-		right.detach();
+		nw.detach();
+		ne.detach();
+		sw.detach();
+		se.detach();
+		pan.detach();
+		tilt.detach();
 		attached = false;
 	}
 }
@@ -64,29 +72,31 @@ void UserRobot::teleopInit(){
  */
 void UserRobot::teleopLoop(){
 	Joystick stick = comm->controlData->joysticks[0];
-	int leftVal = stick.axis[1] - 128;
-	int rightVal = stick.axis[4] - 128;
+	Serial.println("Teleop loop");
+	int y = stick.axis[1];
+	int x = stick.axis[2];
+	int z = stick.axis[0];
+	int panVal = position; //= stick.axis[3];
+	position += 1;
+	if (position > 127)
+		position = -128;
+	int tiltVal = stick.axis[4];
 
-	//Deadband to remove the non-centered stick issues. 360 controller requires a big deadband.
-	leftVal = deadband(leftVal, 25);
-	rightVal = deadband(rightVal, 25);
+	int nwVal = y + z + x;
+	int neVal = y - z - x;
+	int swVal = y + z - x;
+	int seVal = y - z + x;
 
-	//Scale to range BoeBot servos respond.
-	leftVal = leftVal * 40 / 127;
-	rightVal = rightVal * 40 / 127;
-
-	if(teleopCounter % 5 == 0){
-		Serial.print("Left:");
-		Serial.print(leftVal);
-		Serial.print(" Right:");
-		Serial.println(rightVal);
-	}
-
-	left.write(-leftVal);
-	right.write(rightVal);
-
+	nw.write(limit(nwVal, -128, 127));
+	ne.write(limit(neVal, -128, 127));
+	sw.write(limit(swVal, -128, 127));
+	se.write(limit(seVal, -128, 127));
+	pan.write(panVal);
+	tilt.write(tiltVal);
 	teleopCounter++;
 }
+
+
 
 /*
  * Perform any initialization needed before disabled mode.
@@ -123,16 +133,6 @@ void UserRobot::autonomousInit(){
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void UserRobot::autonomousLoop(){
-	left.write(-position);
-	right.write(position);
-
-	position += direction;
-	if (position <= start - range || position >= start + range) {
-		direction *= -1;
-		//position = 0;
-	}
-
-	autonomousCounter++;
 }
 
 /*
