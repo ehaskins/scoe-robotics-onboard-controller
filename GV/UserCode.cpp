@@ -63,6 +63,10 @@ void UserRobot::userInit(void) {
 	rightLimitMotor.setMaxShift(USER_MAX_SHIFT);
 	rearLimitMotor.setMaxShift(USER_MAX_SHIFT);
 
+	leftLimitMotor.setBounds(-12.0f, 12.0f);
+	rightLimitMotor.setBounds(-12.0f, 12.0f);
+	rearLimitMotor.setBounds(-12.0f, 12.0f);
+
 	kiwidrive.init((IMotor*)&leftLimitMotor, (IMotor*)&rightLimitMotor, (IMotor*)&rearLimitMotor);
 	kiwidrive.invertForward(USER_INVERT_FORWARD);
 	kiwidrive.invertStrafe(USER_INVERT_STRAFE);
