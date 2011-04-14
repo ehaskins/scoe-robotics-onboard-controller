@@ -16,45 +16,53 @@
 
 class PIDMotor : public IMotor {
 private:
-	bool m_enabled;
 	PIDController m_pid;
 	IMotor* m_pMotor;
 	ISpeedSensor* m_pSpeedSensor;
 
 public:
 	PIDMotor()
-	:m_enabled(false), m_pid(0.0f), m_pMotor(NULL), m_pSpeedSensor(NULL) {}
+	:m_pid(0), m_pMotor(NULL), m_pSpeedSensor(NULL) {}
 
 	void init(int port) {}
-	void init(IMotor* baseMotor, ISpeedSensor* baseSensor, float idle = 0.0f) {
-		m_pid.fill(idle);
+	void init(IMotor* baseMotor, ISpeedSensor* baseSensor) {
+		m_pid.fill(baseMotor->getIdle());
 		m_pMotor = baseMotor;
 		m_pSpeedSensor = baseSensor;
 	}
 
+	void setIdle(int idle) {
+		m_pMotor->setIdle(idle);
+	}
+
+	int getIdle() const {
+		return m_pMotor->getIdle();
+	}
+
 	void setEnabled(bool enable) {
-		m_enabled = enable;
+		m_pMotor->setEnabled(enable);
+		m_pSpeedSensor->setEnabled(enable);
 	}
 
 	bool isEnabled() const {
-		return m_enabled;
+		return (m_pMotor->isEnabled() && m_pSpeedSensor->isEnabled());
 	}
 
-	bool setBounds(float min, float max) {
+	bool setBounds(int min, int max) {
 		return m_pMotor->setBounds(min, max);
 	}
 
-	float getMinBound() const {
+	int getMinBound() const {
 		return m_pMotor->getMinBound();
 	}
 
-	float getMaxBound() const {
+	int getMaxBound() const {
 		return m_pMotor->getMaxBound();
 	}
 
-	void setSpeed(float speed) {
-		float actual = m_pSpeedSensor->getSpeed();
-		float output = m_pid.control(speed, actual);
+	void setSpeed(int speed) {
+		int actual = m_pSpeedSensor->getSpeed();
+		int output = m_pid.control(speed, actual);
 		m_pMotor->setSpeed(output);
 	}
 };

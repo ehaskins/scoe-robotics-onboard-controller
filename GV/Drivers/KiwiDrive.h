@@ -64,11 +64,14 @@ public:
 
 	inline int getNumMotors() const { return 3; }
 
-	bool setMotorBounds(int motor, float min, float max);
-	float getMotorUpperBound(int motor) const;
-	float getMotorLowerBound(int motor) const;
-	bool driveMotor(int motor, float value);
-	void driveSystem(float* axisVector);
+	bool setMotorIdle(int motor, int idle);
+	int getMotorIdle(int motor) const;
+
+	bool setMotorBounds(int motor, int min, int max);
+	int getMotorUpperBound(int motor) const;
+	int getMotorLowerBound(int motor) const;
+	bool driveMotor(int motor, int value);
+	void driveSystem(int* axisVector);
 
 	void invertStrafe(bool invert) {
 		m_invertStrafe = invert;

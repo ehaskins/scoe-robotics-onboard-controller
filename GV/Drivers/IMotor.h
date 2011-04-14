@@ -19,13 +19,17 @@ public:
 	 * @param max The upper bound.
 	 * @return <b>true</b> if the bounds are valid, <b>false</b> otherwise.
 	 */
-	virtual bool setBounds(float min, float max) = 0;
+	virtual bool setBounds(int min, int max) = 0;
 
-	virtual float getMinBound() const = 0;
+	virtual int getMinBound() const = 0;
 
-	virtual float getMaxBound() const = 0;
+	virtual int getMaxBound() const = 0;
 
-	virtual void setSpeed(float speed) = 0;
+	virtual void setIdle(int idle) = 0;
+
+	virtual int getIdle() const = 0;
+
+	virtual void setSpeed(int speed) = 0;
 };
 
 #endif /* IMOTOR_H_ */

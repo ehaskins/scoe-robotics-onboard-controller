@@ -47,32 +47,32 @@ void UserRobot::userInit(void) {
 	disabledInitComplete = false;
 
 	// Initialize the robot parts.
-	leftMotor.init(PIN_LEFT_MOTOR);
-	rightMotor.init(PIN_RIGHT_MOTOR);
-	rearMotor.init(PIN_REAR_MOTOR);
+
+	// 137"/s max speed, approx., with gearbox and CIM motors.
+	leftMotor.setBounds(-137, 137);
+	rightMotor.setBounds(-137, 137);
+	rearMotor.setBounds(-137, 137);
 
 	leftMotor.setInverted(USER_INVERT_LEFT_MOTOR);
 	rightMotor.setInverted(USER_INVERT_RIGHT_MOTOR);
 	rearMotor.setInverted(USER_INVERT_REAR_MOTOR);
 
-	leftLimitMotor.init(&leftMotor);
-	rightLimitMotor.init(&rightMotor);
-	rearLimitMotor.init(&rearMotor);
+	leftMotor.setIdle(0);
+	rightMotor.setIdle(0);
+	rearMotor.setIdle(0);
 
-	leftLimitMotor.setMaxShift(USER_MAX_SHIFT);
-	rightLimitMotor.setMaxShift(USER_MAX_SHIFT);
-	rearLimitMotor.setMaxShift(USER_MAX_SHIFT);
+	leftMotor.init(PIN_LEFT_MOTOR);
+	rightMotor.init(PIN_RIGHT_MOTOR);
+	rearMotor.init(PIN_REAR_MOTOR);
 
-	leftLimitMotor.setBounds(-12.0f, 12.0f);
-	rightLimitMotor.setBounds(-12.0f, 12.0f);
-	rearLimitMotor.setBounds(-12.0f, 12.0f);
+	leftLimitMotor.init(&leftMotor, USER_MAX_SHIFT);
+	rightLimitMotor.init(&rightMotor, USER_MAX_SHIFT);
+	rearLimitMotor.init(&rearMotor, USER_MAX_SHIFT);
 
 	kiwidrive.init((IMotor*)&leftLimitMotor, (IMotor*)&rightLimitMotor, (IMotor*)&rearLimitMotor);
 	kiwidrive.invertForward(USER_INVERT_FORWARD);
 	kiwidrive.invertStrafe(USER_INVERT_STRAFE);
 	kiwidrive.invertYaw(USER_INVERT_YAW);
-
-	Serial.println("User init complete.");
 }
 
 /*
@@ -121,17 +121,8 @@ void UserRobot::teleopLoop(){
 	int strafe = stick.axis[LEFT_X] - 128;
 	int rotate = stick.axis[RIGHT_X] - 128;
 
-	// Deadband to remove the non-centered stick issues. 360 controller requires a big deadband.
-	forward = deadband(forward, 25);
-	strafe = deadband(strafe, 25);
-	rotate = deadband(rotate, 25);
-
-	float fwdFloat = (float)forward * 12.0f / 127.0f;
-	float strFloat = (float)strafe * 12.0f / 127.0f;
-	float rotFloat = (float)rotate * 12.0f / 127.0f;
-
 	// Drive the damn robot.
-	float controls[] = { fwdFloat, strFloat, rotFloat };
+	int controls[] = { forward, strafe, rotate };
 	kiwidrive.driveSystem(controls);
 }
 
