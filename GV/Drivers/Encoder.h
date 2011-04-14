@@ -79,7 +79,7 @@ public:
 
 	int getNumTicksPerCycle() const {
 		// TODO Verify this against the encoders themselves!
-		return 48;
+		return 250;
 	}
 
 	int getTickCount() const {

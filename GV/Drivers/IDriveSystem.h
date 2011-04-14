@@ -27,21 +27,25 @@ public:
 	 * @param max The maximum value.
 	 * @return <b>true</b> if the bounds are valid and the motor exists, <b>false</b> otherwise.
 	 */
-	virtual bool setMotorBounds(int motor, float min, float max) = 0;
+	virtual bool setMotorBounds(int motor, int min, int max) = 0;
 
 	/**
 	 * Gets the upper bound for the given motor.
 	 * @param motor The motor to get.
 	 * @return The defined upper bound, or 0 if the motor is not valid.
 	 */
-	virtual float getMotorUpperBound(int motor) const = 0;
+	virtual int getMotorUpperBound(int motor) const = 0;
 
 	/**
 	 * Gets the lower bound for the given motor.
 	 * @param motor The motor to get.
 	 * @return The defined lower bound, or 0 if the motor is not valid.
 	 */
-	virtual float getMotorLowerBound(int motor) const = 0;
+	virtual int getMotorLowerBound(int motor) const = 0;
+
+	virtual bool setMotorIdle(int motor, int idle) = 0;
+
+	virtual int getMotorIdle(int motor) const = 0;
 
 	/**
 	 * Drives the motor at the given value, if possible.
@@ -49,13 +53,13 @@ public:
 	 * @param value The drive value to send.
 	 * @return <b>true</b> if the motor is valid; <b>false</b> otherwise.
 	 */
-	virtual bool driveMotor(int motor, float value) = 0;
+	virtual bool driveMotor(int motor, int value) = 0;
 
 	/**
 	 * Drives the full system.
-	 * @param axisVector An array of floating-point axial movement values.
+	 * @param axisVector An array of axial movement values.
 	 */
-	virtual void driveSystem(float* axisVector) = 0;
+	virtual void driveSystem(int* axisVector) = 0;
 };
 
 #endif /* IDRIVESYSTEM_H_ */

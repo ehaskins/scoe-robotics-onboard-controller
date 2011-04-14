@@ -17,15 +17,23 @@ private:
 	IMotor* m_pMotor;
 	float m_lastOutput;
 	float m_maxShift;
-	float m_idle;
 
 public:
-	LimitMotor() :m_pMotor(NULL), m_lastOutput(0.0f), m_maxShift(0.1f), m_idle(0.0f) {}
+	LimitMotor() :m_pMotor(NULL), m_lastOutput(0), m_maxShift(15) {}
 
 	void init(int port) {}
-	void init(IMotor* motor) {
+	void init(IMotor* motor, int maxShift) {
 		m_pMotor = motor;
-		m_pMotor->setSpeed(m_idle);
+		m_maxShift = maxShift;
+		m_lastOutput = m_pMotor->getIdle();
+	}
+
+	void setIdle(int idle) {
+		m_pMotor->setIdle(idle);
+	}
+
+	int getIdle() const {
+		return m_pMotor->getIdle();
 	}
 
 	void setEnabled(bool enable) {
@@ -36,25 +44,25 @@ public:
 		return m_pMotor->isEnabled();
 	}
 
-	bool setBounds(float min, float max) {
+	bool setBounds(int min, int max) {
 		return m_pMotor->setBounds(min,max);
 	}
 
-	float getMinBound() const {
+	int getMinBound() const {
 		return m_pMotor->getMinBound();
 	}
 
-	float getMaxBound() const {
+	int getMaxBound() const {
 		return m_pMotor->getMaxBound();
 	}
 
-	void setSpeed(float speed) {
-		float error = (speed - m_lastOutput);
-		float absError = (error < 0.0f) ? (-error) : (error);
-		float output = speed;
+	void setSpeed(int speed) {
+		int error = (speed - m_lastOutput);
+		int absError = abs(error);
+		int output = speed;
 		if (absError > m_maxShift) {
 			// Clamp.
-			if (error < 0.0f) {
+			if (error < 0) {
 				output = m_lastOutput - m_maxShift;
 			} else {
 				output = m_lastOutput + m_maxShift;
@@ -64,16 +72,14 @@ public:
 		m_lastOutput = output;
 	}
 
-	float getMaxShift() const {
+	int getMaxShift() const {
 		return m_maxShift;
 	}
 
-	void setMaxShift(float maxShift) {
-		if (maxShift < 0.0f) {
-			maxShift = -maxShift;
-		}
-		float extreme = getMaxBound() - getMinBound();
-		maxShift = constrain(maxShift, 0.0f, extreme);
+	void setMaxShift(int maxShift) {
+		maxShift = abs(maxShift);
+		int extreme = getMaxBound() - getMinBound();
+		maxShift = constrain(maxShift, 0, extreme);
 		m_maxShift = maxShift;
 	}
 };

@@ -7,7 +7,7 @@
 
 #include "KiwiDrive.h"
 
-bool KiwiDrive::setMotorBounds(int motor, float min, float max) {
+bool KiwiDrive::setMotorBounds(int motor, int min, int max) {
 	IMotor* m = getMotor((KiwiMotor)motor);
 	if (m == NULL) {
 		return false;
@@ -16,46 +16,52 @@ bool KiwiDrive::setMotorBounds(int motor, float min, float max) {
 	}
 }
 
-float KiwiDrive::getMotorUpperBound(int motor) const {
+int KiwiDrive::getMotorUpperBound(int motor) const {
 	IMotor* m = getMotor((KiwiMotor)motor);
 	if (m == NULL) {
-		Serial.println("Invalid motor specified in getMotorUpperBound()!");
-		return 0.0f;
+//		Serial.println("Invalid motor specified in getMotorUpperBound()!");
+		return 0;
 	} else {
 		return m->getMaxBound();
 	}
 }
 
-float KiwiDrive::getMotorLowerBound(int motor) const {
+int KiwiDrive::getMotorLowerBound(int motor) const {
 	IMotor* m = getMotor((KiwiMotor)motor);
 	if (m == NULL) {
-		Serial.println("Invalid motor specified in getMotorLowerBound()!");
-		return 0.0f;
+//		Serial.println("Invalid motor specified in getMotorLowerBound()!");
+		return 0;
 	} else {
 		return m->getMinBound();
 	}
 }
 
-bool KiwiDrive::driveMotor(int motor, float value) {
+bool KiwiDrive::setMotorIdle(int motor, int idle) {
 	IMotor* m = getMotor((KiwiMotor)motor);
 	if (m == NULL) {
-		Serial.println("Invalid motor specified in driveMotor()!");
 		return false;
 	} else {
-		if (value < m->getMinBound() || value > m->getMaxBound()) {
-			return false;
-		} else {
-			m->setSpeed(value);
-			return true;
-		}
+		m->setIdle(idle);
+		return true;
 	}
 }
 
-void KiwiDrive::driveSystem(float* axisVector) {
+bool KiwiDrive::driveMotor(int motor, int value) {
+	IMotor* m = getMotor((KiwiMotor)motor);
+	if (m == NULL) {
+//		Serial.println("Invalid motor specified in driveMotor()!");
+		return false;
+	} else {
+		m->setSpeed(isEnabled() ? value : getMotorIdle(motor));
+		return true;
+	}
+}
+
+void KiwiDrive::driveSystem(int* axisVector) {
 	// Get the control axes that matter to us
-	float forward = axisVector[0];
-	float strafe = axisVector[1];
-	float yaw = axisVector[2];
+	int forward = axisVector[0];
+	int strafe = axisVector[1];
+	int yaw = axisVector[2];
 
 	if (m_invertForward) {
 		forward = -forward;
@@ -70,19 +76,19 @@ void KiwiDrive::driveSystem(float* axisVector) {
 	}
 
 	// Apply the kiwi drive equations to the motor control values.
-	float rearValue = strafe + yaw;
-	float rightValue = (-0.5f * strafe) + (-0.866f * forward) + yaw;
-	float leftValue = (-0.5f * strafe) + (0.866f * forward) + yaw;
+	int rearValue = strafe + yaw;
+	int rightValue = (-strafe / 2) + ((forward * 216) / 250) + yaw;
+	int leftValue = (-strafe / 2) + ((-forward * 216) / 250) + yaw;
 
 	// Clamp the motor values.
-	rearValue = constrain(rearValue, -2.0f, 2.0f);
-	rightValue = constrain(rightValue, -2.366f, 2.366f);
-	leftValue = constrain(leftValue, -2.366f, 2.366f);
+	rearValue = constrain(rearValue, -255, 255);
+	rightValue = constrain(rightValue, -300, 300);
+	leftValue = constrain(leftValue, -300, 300);
 
 	// Convert and map the values to feet/second speeds.
-	rearValue = rearValue * 12.0f / 2.366f;
-	rightValue = rightValue * 12.0f / 2.366f;
-	leftValue = leftValue * 12.0f / 2.366f;
+	rearValue = map(rearValue, -300, 300, getMotorLowerBound(KIWI_REAR), getMotorUpperBound(KIWI_REAR));
+	rightValue = map(rightValue, -300, 300, getMotorLowerBound(KIWI_RIGHT), getMotorUpperBound(KIWI_RIGHT));
+	leftValue = map(leftValue, -300, 300, getMotorLowerBound(KIWI_LEFT), getMotorUpperBound(KIWI_LEFT));
 
 	// Output the values to the motors.
 	driveMotor(KIWI_LEFT, leftValue);
