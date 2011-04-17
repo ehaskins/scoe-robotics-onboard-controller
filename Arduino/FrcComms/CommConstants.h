@@ -20,7 +20,7 @@
 
 	//CONTROL DATA
 	const int NUM_JOYSTICKS = 4;
-	const static int CONTROL_HEADER_SIZE = 83;
+	const static int CONTROL_HEADER_SIZE = 80;
 	const static int CONTROL_PACKET_SIZE = PACKET_SIZE;
 	const static int USER_CONTROL_DATA_SIZE = CONTROL_PACKET_SIZE - CONTROL_HEADER_SIZE - 8;
 
