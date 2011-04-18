@@ -8,5 +8,8 @@
 #include "SpeedSensor.h"
 #include "Encoder.h"
 
+// Manipulator stuff
+#include "DigitalInput.h"
+
 // Drive system stuff
 #include "KiwiDrive.h"

@@ -57,9 +57,9 @@ void UserRobot::userInit(void) {
 	rightMotor.setInverted(USER_INVERT_RIGHT_MOTOR);
 	rearMotor.setInverted(USER_INVERT_REAR_MOTOR);
 
-	leftMotor.setIdle(0);
-	rightMotor.setIdle(0);
-	rearMotor.setIdle(0);
+	leftMotor.setIdle(USER_MOTOR_IDLE_SPEED);
+	rightMotor.setIdle(USER_MOTOR_IDLE_SPEED);
+	rearMotor.setIdle(USER_MOTOR_IDLE_SPEED);
 
 	leftMotor.init(PIN_LEFT_MOTOR);
 	rightMotor.init(PIN_RIGHT_MOTOR);
@@ -104,7 +104,6 @@ enum XboxJoysticks {
 	RIGHT_X = 3,
 	RIGHT_Y = 4
 };
-
 
 /*
  * Process teleop control data here.
