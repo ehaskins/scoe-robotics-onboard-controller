@@ -29,4 +29,10 @@ const int FIXED_LOOP_FREQUENCY = 1;
 // The maximum shift in motor speed between timesteps.
 #define USER_MAX_SHIFT			15
 
+// The maximum motor speed. TODO Change this!
+#define USER_MOTOR_MAX_SPEED	137
+
+// The idle (disabled) motor speed.
+#define USER_MOTOR_IDLE_SPEED	0
+
 #endif

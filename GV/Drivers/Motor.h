@@ -8,14 +8,13 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-#include "Drivers.h"
-#include "IDevice.h"
 #include "IMotor.h"
-#include <inttypes.h>
-#include "../Utils.h"
+#include <WProgram.h>
+#include <Servo.h>
 
 class Motor : public IMotor {
 private:
+	Servo m_servo;
 	int m_pwmPort;
 	bool m_enabled;
 
@@ -43,11 +42,16 @@ public:
 
 	void init(int port) {
 		m_pwmPort = port;
-		pinMode(m_pwmPort, OUTPUT);
+		//pinMode(m_pwmPort, OUTPUT);
 		setSpeed(m_idle);
 	}
 
 	void setEnabled(bool enable) {
+		if (enable) {
+			m_servo.attach(m_pwmPort);
+		} else {
+			m_servo.detach();
+		}
 		m_enabled = enable;
 	}
 
@@ -83,10 +87,15 @@ public:
 		speed = constrain(speed, m_minBound, m_maxBound);
 
 		// Convert from speed bounds to PWM duty cycle.
-		int output = map(speed, m_minBound, m_maxBound, 0, 255);
+		int output = map(speed, m_minBound, m_maxBound, 0, 180);
+
+		// Invert if necessary.
+		if (m_inverted) {
+			output = 180 - output;
+		}
 
 		// Output the PWM signal.
-		analogWrite(m_pwmPort, output);
+		m_servo.write(output);
 	}
 };
 

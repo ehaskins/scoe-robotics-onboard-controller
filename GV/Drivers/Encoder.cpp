@@ -10,37 +10,44 @@
 
 typedef struct {
 	Encoder* encoder;
-	bool isFullCycle;
+//	bool isFullCycle;
 	bool isEnabled;
 } EncoderMapping;
 
 // The map of encoders to interrupt pins.
 static volatile EncoderMapping s_encoderIntPins[EXTERNAL_NUM_INTERRUPTS];
 
-// The generic interrupt service routine.
-void _handleEncoderINT() {
-	// Get the interrupt number.
-	uint8_t mask = EIFR;
-	uint8_t i = 0;
-	for (i = 0; i < EXTERNAL_NUM_INTERRUPTS; i++) {
-		if (mask & (1 << i)) {
-			i++;
-			break;
-		}
-	}
-	// Get the mapping, and conditionally read the interrupt.
-	if (i != 0) {
-		volatile EncoderMapping* mapping = &s_encoderIntPins[i-1];
-		Encoder* enc = mapping->encoder;
-		if (enc != NULL && mapping->isEnabled) {
-			if (mapping->isFullCycle) {
-				enc->onCycle();
-			} else {
-				enc->onTick();
-			}
-		}
-	}
-}
+#define DECL_ENC_INT(intnum)  \
+  static void _handleEncoder_##intnum##_ () { \
+    uint8_t mask = EIFR; \
+    volatile EncoderMapping* mapping = &s_encoderIntPins[(intnum)]; \
+    Encoder* enc = mapping->encoder; \
+    if (enc != NULL && mapping->isEnabled) { \
+      enc->onTick(); \
+    } \
+  }
+
+#define ENC_INT(intnum)  _handleEncoder_##intnum##_
+
+// Void function pointer
+typedef void(*VoidFunc)();
+
+// Generate the interrupt declarations.
+DECL_ENC_INT(0)
+DECL_ENC_INT(1)
+DECL_ENC_INT(2)
+DECL_ENC_INT(3)
+DECL_ENC_INT(4)
+DECL_ENC_INT(5)
+
+static VoidFunc _encHandlers[] = {
+  ENC_INT(0),
+  ENC_INT(1),
+  ENC_INT(2),
+  ENC_INT(3),
+  ENC_INT(4),
+  ENC_INT(5)
+};
 
 void Encoder::initInterrupts(int tickINT) {
 
@@ -50,10 +57,13 @@ void Encoder::initInterrupts(int tickINT) {
 	// Map the first encoder.
 	volatile EncoderMapping* tickMap = &s_encoderIntPins[tickINT];
 	tickMap->encoder = this;
-	tickMap->isFullCycle = false;
+//	tickMap->isFullCycle = false;
+
+	// Enable the LED blink pin.
+//	pinMode(13, OUTPUT);
 
 	// Map the interrupts themselves.
-	attachInterrupt(tickINT, _handleEncoderINT, RISING);
+	attachInterrupt(tickINT, _encHandlers[tickINT], RISING);
 }
 
 void Encoder::enableInterrupts(bool enable) {
