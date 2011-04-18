@@ -62,7 +62,7 @@ void UserRobot::setOutputsEnabled(bool enabled) {
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::teleopInit(){
-
+	Serial.println("Entering tele-op");
 }
 /*
  * Process teleop control data here.
@@ -72,7 +72,7 @@ void UserRobot::teleopInit(){
  */
 void UserRobot::teleopLoop(){
 	Joystick stick = comm->controlData->joysticks[0];
-	Serial.println("Teleop loop");
+
 	int y = stick.axis[1];
 	int x = stick.axis[2];
 	int z = stick.axis[0];
@@ -86,13 +86,13 @@ void UserRobot::teleopLoop(){
 	int neVal = y - z - x;
 	int swVal = y + z - x;
 	int seVal = y - z + x;
-
+/*
 	nw.write(limit(nwVal, -128, 127));
 	ne.write(limit(neVal, -128, 127));
 	sw.write(limit(swVal, -128, 127));
 	se.write(limit(seVal, -128, 127));
 	pan.write(panVal);
-	tilt.write(tiltVal);
+	tilt.write(tiltVal);*/
 	teleopCounter++;
 }
 
@@ -104,7 +104,7 @@ void UserRobot::teleopLoop(){
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::disabledInit(){
-
+	Serial.println("Entering disabled");
 }
 /*
  * Process disabled control data here.
@@ -122,7 +122,7 @@ void UserRobot::disabledLoop(){
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::autonomousInit(){
-
+	Serial.println("Entering autonomous");
 }
 
 
@@ -174,9 +174,11 @@ void UserRobot::fastLoop(void) {
 void UserRobot::commLoop(void) {
 	//Serial.println((int)communication.commandData.joysticks[1].axis[1]);
 	//Serial.println("Slow loop: Implement me!");
-	if (comm->controlData->mode.getEnabled()) {
-		setOutputsEnabled(true);
-		if (comm->controlData->mode.getAutonomous()) {
+	Mode mode = comm->controlData->mode;
+	//Serial.println((int)mode.data.data);
+	if (mode.getEnabled()) {
+		//setOutputsEnabled(true);
+		if (mode.getAutonomous()) {
 			if (!autoInitComplete){
 				autonomousInit();
 				autoInitComplete = true;

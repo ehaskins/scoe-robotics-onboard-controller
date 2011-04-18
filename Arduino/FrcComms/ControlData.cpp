@@ -16,28 +16,6 @@
 	}*/
 
 	void ControlData::parse(unsigned char data[]){
-		//CommandData out;
-
-		int offset = 0;
-		packetId = readUInt16(data, &offset);
-		mode.data.data = readUInt8(data, &offset);
-		dsInputs = readUInt8(data, &offset);
-		teamNumber = readUInt16(data, &offset);
-		alliance = readUInt8(data, &offset);
-		position = readUInt8(data, &offset);
-		//TODO:Read joysticks.
-		for (int i = 0; i < 4; i++){
-			joysticks[i].parse(data, &offset);
-		}
-
-		cRioChecksum = readUInt64(data, &offset);
-		fpgaChecksum0 = readUInt32(data, &offset);
-		fpgaChecksum1 = readUInt32(data, &offset);
-		fpgaChecksum2 = readUInt32(data, &offset);
-		fpgaChecksum3 = readUInt32(data, &offset);
-
-		//TODO:Read version.
-
 		int crcOffset = CONTROL_PACKET_SIZE - 4;
 		int temp = crcOffset;
 		unsigned long dataCrc = readUInt32(data, &temp);
@@ -47,4 +25,27 @@
 		unsigned long calculatedCrc = crc(data, CONTROL_PACKET_SIZE);
 
 		isValid = calculatedCrc == dataCrc;
+
+		if (isValid)
+		{
+			int offset = 0;
+			packetId = readUInt16(data, &offset);
+			mode.data.data = readUInt8(data, &offset);
+			dsInputs = readUInt8(data, &offset);
+			teamNumber = readUInt16(data, &offset);
+			alliance = readUInt8(data, &offset);
+			position = readUInt8(data, &offset);
+			//TODO:Read joysticks.
+			for (int i = 0; i < 4; i++){
+				joysticks[i].parse(data, &offset);
+			}
+
+			cRioChecksum = readUInt64(data, &offset);
+			fpgaChecksum0 = readUInt32(data, &offset);
+			fpgaChecksum1 = readUInt32(data, &offset);
+			fpgaChecksum2 = readUInt32(data, &offset);
+			fpgaChecksum3 = readUInt32(data, &offset);
+
+			//TODO:Read version.
+		}
 	}
