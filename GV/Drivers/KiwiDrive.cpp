@@ -46,6 +46,15 @@ bool KiwiDrive::setMotorIdle(int motor, int idle) {
 	}
 }
 
+int KiwiDrive::getMotorIdle(int motor) const {
+	IMotor* m = getMotor((KiwiMotor)motor);
+	if (m == NULL) {
+		return 0;
+	} else {
+		return m->getIdle();
+	}
+}
+
 bool KiwiDrive::driveMotor(int motor, int value) {
 	IMotor* m = getMotor((KiwiMotor)motor);
 	if (m == NULL) {
