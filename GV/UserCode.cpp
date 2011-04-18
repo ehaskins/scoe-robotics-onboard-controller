@@ -49,9 +49,9 @@ void UserRobot::userInit(void) {
 	// Initialize the robot parts.
 
 	// 137"/s max speed, approx., with gearbox and CIM motors.
-	leftMotor.setBounds(-137, 137);
-	rightMotor.setBounds(-137, 137);
-	rearMotor.setBounds(-137, 137);
+	leftMotor.setBounds(-USER_MOTOR_MAX_SPEED, USER_MOTOR_MAX_SPEED);
+	rightMotor.setBounds(-USER_MOTOR_MAX_SPEED, USER_MOTOR_MAX_SPEED);
+	rearMotor.setBounds(-USER_MOTOR_MAX_SPEED, USER_MOTOR_MAX_SPEED);
 
 	leftMotor.setInverted(USER_INVERT_LEFT_MOTOR);
 	rightMotor.setInverted(USER_INVERT_RIGHT_MOTOR);

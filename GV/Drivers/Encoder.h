@@ -11,19 +11,22 @@
 #include "Drivers.h"
 #include "IEncoder.h"
 
+// Ticks per Cycle Settings: http://products.cui.com/CUI_AMT102-V_Dip_Switch_Settings.pdf?fileID=3816
 class Encoder : public IEncoder {
 private:
 	bool m_enabled;
 	int m_dirPort;
 	int m_tickINT;
-//	int m_cycleINT;
+	EncoderDirection m_expectedDirection;
+	long m_errorCount;
 
-	int m_tickCount;
-//	int m_phaseShift;
+	long m_tickCount;
+
+	long m_ticksPerCycle;
 
 public:
 	Encoder()
-	:m_enabled(false), m_dirPort(NO_PORT), m_tickINT(NO_PORT), m_tickCount(0) {}
+	:m_enabled(false), m_dirPort(NO_PORT), m_tickINT(NO_PORT), m_expectedDirection(FORWARD), m_errorCount(0), m_tickCount(0), m_ticksPerCycle(2048) {}
 
 	void init(int port) {}
 	void init(int dirPort, int tickINT) {
@@ -52,20 +55,41 @@ public:
 		return (EncoderDirection)digitalRead(m_dirPort);
 	}
 
+	void setExpectedDirection(EncoderDirection dir) {
+		m_expectedDirection = dir;
+	}
+
+	long getDirectionErrorCount() const {
+		return m_errorCount;
+	}
+	
+	void resetDirectionErrorCount() {
+		m_errorCount = 0;
+	}
+
 	void onTick() {
-		if (getDirection() == FORWARD) {
+		EncoderDirection dir = getDirection();
+		if (dir == FORWARD) {
 			m_tickCount++;
+			// Turn on the LED.
+			digitalWrite(13, HIGH);
 		} else {
 			m_tickCount--;
+			// Turn off the LED.
+			digitalWrite(13, LOW);
+		}
+		if (dir != m_expectedDirection) {
+			m_errorCount++;
 		}
 	}
 
+/**
 	void onCycle() {
 		// Determine the offset from the expected tick count.
-		int correctCount = m_tickCount /* + m_phaseShift */;
+		long correctCount = m_tickCount + m_phaseShift;
 
 		// Get the number of cycles completed, and the number of ticks off of the mark.
-		int offset = (correctCount % getNumTicksPerCycle());
+		long offset = (correctCount % getNumTicksPerCycle());
 
 		// Round to the nearest full cycle.
 		if (offset > (getNumTicksPerCycle() / 2)) {
@@ -76,13 +100,17 @@ public:
 			m_tickCount -= offset;
 		}
 	}
+*/
 
-	int getNumTicksPerCycle() const {
-		// TODO Verify this against the encoders themselves!
-		return 250;
+	long getNumTicksPerCycle() const {
+		return m_ticksPerCycle;
+	}
+	
+	void setNumTicksPerCycle(long numTicks) {
+		m_ticksPerCycle = numTicks;
 	}
 
-	int getTickCount() const {
+	long getTickCount() const {
 		return m_tickCount;
 	}
 

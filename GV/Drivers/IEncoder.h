@@ -36,7 +36,23 @@ public:
 	 * @return <b>FORWARD</b> if the shaft was last moved forwards, <b>BACKWARD</b> otherwise.
 	 */
 	virtual EncoderDirection getDirection() const = 0;
+	
+	/**
+	 * Sets the expected direction of the encoder.
+	 * @param dir The expected direction of the system.
+	 */
+	virtual void setExpectedDirection(EncoderDirection dir) = 0;
 
+	/**
+	 * Gets the number of direction errors counted since the last reset.
+	 */
+	virtual long getDirectionErrorCount() const = 0;
+	
+	/**
+	 * Resets the direction error counter.
+	 */
+	virtual void resetDirectionErrorCount() = 0;
+	
 	/**
 	 * Called upon the one-tick interrupt. Adds or subtracts a tick from the counter.
 	 */
@@ -45,12 +61,18 @@ public:
 	/**
 	 * Retrieves the number of ticks per cycle.
 	 */
-	virtual int getNumTicksPerCycle() const = 0;
+	virtual long getNumTicksPerCycle() const = 0;
 
+	/**
+	 * Sets the number of ticks per cycle.
+	 * @param numTicks The number of ticks per cycle.
+	 */
+	virtual void setNumTicksPerCycle(long numTicks) = 0;
+	
 	/**
 	 * Gets the number of ticks counted since the last reset.
 	 */
-	virtual int getTickCount() const = 0;
+	virtual long getTickCount() const = 0;
 
 	/**
 	 * Resets the tick counter to zero.
