@@ -145,7 +145,7 @@ void Configuration::poll(void) {
 						mac[2], mac[3], mac[4],
 						mac[5] };
 				writeUInt16(response, getDeviceId(), 0);
-				socket.sendPacket(response, 8, broadcastIp, 1001);
+				socket.sendPacket(response, 9, broadcastIp, 1001);
 			}
 			break;
 		case 0x02: //Read data at slot x
