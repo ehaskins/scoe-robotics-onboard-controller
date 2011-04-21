@@ -32,7 +32,7 @@ public:
 		return m_enabled;
 	}
 
-	bool getValue() const {
+	bool getValue() {
 		if (!isEnabled()) {
 			return false;
 		}

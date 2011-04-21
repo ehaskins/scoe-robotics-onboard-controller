@@ -24,6 +24,10 @@ public:
 	PIDMotor()
 	:m_pid(0), m_pMotor(NULL), m_pSpeedSensor(NULL) {}
 
+	PIDController* getPIDController() {
+		return &m_pid;
+	}
+
 	void init(int port) {}
 	void init(IMotor* baseMotor, ISpeedSensor* baseSensor) {
 		m_pid.fill(baseMotor->getIdle());
