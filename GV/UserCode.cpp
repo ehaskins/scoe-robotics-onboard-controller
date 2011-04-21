@@ -21,18 +21,31 @@ static LimitMotor leftLimitMotor;
 static LimitMotor rightLimitMotor;
 static LimitMotor rearLimitMotor;
 
+static PIDMotor leftPIDMotor;
+static PIDMotor rightPIDMotor;
+static PIDMotor rearPIDMotor;
+
 // Drive encoders.
-//	static Encoder leftEncoder;
-//	static Encoder rightEncoder;
-//	static Encoder rearEncoder;
+static Encoder leftEncoder;
+static Encoder rightEncoder;
+static Encoder rearEncoder;
 
 // Drive speed sensors.
-//	static SpeedSensor leftSensor;
-//	static SpeedSensor rightSensor;
-//	static SpeedSensor rearSensor;
+static SpeedSensor leftSpeedSensor;
+static SpeedSensor rightSpeedSensor;
+static SpeedSensor rearSpeedSensor;
 
 // Drive system.
 static KiwiDrive kiwidrive;
+
+// Launcher motors and sensors.
+static Motor launchMotor;
+static Motor intakeMotor;
+static DigitalInput loadSensor;
+static DigitalInput intakeSensor;
+
+// Launch system.
+static BallLauncher launcher;
 
 /*
  * Guaranteed to be called after the following have been initialized:
@@ -65,14 +78,55 @@ void UserRobot::userInit(void) {
 	rightMotor.init(PIN_RIGHT_MOTOR);
 	rearMotor.init(PIN_REAR_MOTOR);
 
+	// Set up the limit motors (derivative saturation).
 	leftLimitMotor.init(&leftMotor, USER_MAX_SHIFT);
 	rightLimitMotor.init(&rightMotor, USER_MAX_SHIFT);
 	rearLimitMotor.init(&rearMotor, USER_MAX_SHIFT);
 
+#if USING_PID_CONTROLLERS
+	// Set up the encoders.
+	leftEncoder.setNumTicksPerCycle(USER_LEFT_ENCODER_PPR);
+	rightEncoder.setNumTicksPerCycle(USER_RIGHT_ENCODER_PPR);
+	rearEncoder.setNumTicksPerCycle(USER_REAR_ENCODER_PPR);
+
+	leftEncoder.init(PIN_LEFT_ENCODER_DIR, PIN_LEFT_ENCODER_INT);
+	rightEncoder.init(PIN_RIGHT_ENCODER_DIR, PIN_RIGHT_ENCODER_INT);
+	rearEncoder.init(PIN_REAR_ENCODER_DIR, PIN_REAR_ENCODER_INT);
+
+	// Set up the speed sensors.
+	leftSpeedSensor.init(&leftEncoder, USER_WHEEL_DIAMETER);
+	rightSpeedSensor.init(&rightEncoder, USER_WHEEL_DIAMETER);
+	rearSpeedSensor.init(&rearEncoder, USER_WHEEL_DIAMETER);
+
+	// Set up the PID motors (sensor feedback control).
+	leftPIDMotor.init(&leftLimitMotor, &leftSpeedSensor);
+	rightPIDMotor.init(&rightLimitMotor, &rightSpeedSensor);
+	rearPIDMotor.init(&rearLimitMotor, &rearSpeedSensor);
+
+	// Set up the drive system.
+	kiwidrive.init((IMotor*)&leftPIDMotor, (IMotor*)&rightPIDMotor, (IMotor*)&rearPIDMotor);
+#else
 	kiwidrive.init((IMotor*)&leftLimitMotor, (IMotor*)&rightLimitMotor, (IMotor*)&rearLimitMotor);
+#endif
 	kiwidrive.invertForward(USER_INVERT_FORWARD);
 	kiwidrive.invertStrafe(USER_INVERT_STRAFE);
 	kiwidrive.invertYaw(USER_INVERT_YAW);
+
+	// Launcher stuff.
+	launchMotor.setBounds(-USER_LAUNCHER_MAX_SPEED, USER_LAUNCHER_MAX_SPEED);
+	launchMotor.setIdle(USER_LAUNCHER_IDLE_SPEED);
+	launchMotor.setInverted(USER_INVERT_LAUNCH_MOTOR);
+	launchMotor.init(PIN_LAUNCH_MOTOR);
+
+	intakeMotor.setBounds(-USER_INTAKE_MAX_SPEED, USER_INTAKE_MAX_SPEED);
+	intakeMotor.setIdle(USER_INTAKE_IDLE_SPEED);
+	intakeMotor.setInverted(USER_INVERT_INTAKE_MOTOR);
+	intakeMotor.init(PIN_INTAKE_MOTOR);
+
+	loadSensor.init(PIN_LOAD_SWITCH);
+	intakeSensor.init(PIN_INTAKE_SWITCH);
+
+	launcher.init((IDigitalInput*)&loadSensor, (IDigitalInput*)&intakeSensor, (IMotor*)&launchMotor, (IMotor*)&intakeMotor);
 }
 
 /*
@@ -81,9 +135,11 @@ void UserRobot::userInit(void) {
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
 		kiwidrive.setEnabled(true);
+		launcher.setEnabled(true);
 		attached = true;
 	} else if (!enabled && attached) {
 		kiwidrive.setEnabled(false);
+		launcher.setEnabled(false);
 		attached = false;
 	}
 }
@@ -120,9 +176,26 @@ void UserRobot::teleopLoop(){
 	int strafe = stick.axis[LEFT_X] - 128;
 	int rotate = stick.axis[RIGHT_X] - 128;
 
+	bool fire = (stick.axis[LR_ANALOG] > 192);
+
 	// Drive the damn robot.
 	int controls[] = { forward, strafe, rotate };
 	kiwidrive.driveSystem(controls);
+
+	// Launch the ball.
+	if (fire) {
+		launcher.driveLauncher(USER_LAUNCHER_FIRE_SPEED);
+	} else {
+		launcher.driveLauncher(USER_LAUNCHER_IDLE_SPEED);
+	}
+
+	// Activate the intake belt.
+	if ((launcher.isIntakePrimed() || fire) && !launcher.isLoaded()) {
+		// Activate the intake belt.
+		launcher.driveIntake(USER_INTAKE_RUN_SPEED);
+	} else {
+		launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
+	}
 }
 
 /*

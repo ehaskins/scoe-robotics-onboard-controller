@@ -2,7 +2,7 @@
 
 #include "Motor.h"
 #include "LimitMotor.h"
-//#include "PIDMotor.h"
+#include "PIDMotor.h"
 
 // Encoder stuff
 #include "SpeedSensor.h"
@@ -10,6 +10,7 @@
 
 // Manipulator stuff
 #include "DigitalInput.h"
+#include "BallLauncher.h"
 
 // Drive system stuff
 #include "KiwiDrive.h"
