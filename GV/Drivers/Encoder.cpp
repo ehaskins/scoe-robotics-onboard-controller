@@ -19,6 +19,7 @@ static volatile EncoderMapping s_encoderIntPins[EXTERNAL_NUM_INTERRUPTS];
 
 #define DECL_ENC_INT(intnum)  \
   static void _handleEncoder_##intnum##_ () { \
+    uint8_t mask = EIFR; \
     volatile EncoderMapping* mapping = &s_encoderIntPins[(intnum)]; \
     Encoder* enc = mapping->encoder; \
     if (enc != NULL && mapping->isEnabled) { \
