@@ -23,7 +23,6 @@ private:
 
 public:
 	PIDController(float idle);
-	virtual ~PIDController();
 
 	void fill(float fill) {
 		for (int i = 0; i < PID_INTEGRAL_SIZE; i++) {

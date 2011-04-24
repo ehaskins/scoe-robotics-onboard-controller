@@ -7,8 +7,8 @@
 
 #include "FRCCommunication.h"
 #include "ControlData.h"
-#include <Ethernet.h>
-#include <Udp.h>
+#include "../Ethernet.h"
+#include "../Udp.h"
 #include "CommConstants.h"
 #include "Configuration.h"
 #include "cpp.h"

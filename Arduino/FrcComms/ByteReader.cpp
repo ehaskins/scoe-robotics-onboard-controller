@@ -6,7 +6,7 @@
  */
 
 #include "ByteReader.h"
-#include <WProgram.h>
+#include "../WProgram.h"
 /*
 void ReadBytes(unsigned char data[], int *offset, int count, unsigned char out[]) {
 	for (int i = 0; i < count; i++){

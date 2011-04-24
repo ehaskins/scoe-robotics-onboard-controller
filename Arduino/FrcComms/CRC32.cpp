@@ -6,7 +6,7 @@
  */
 
 #include "CRC32.h"
-#include <WProgram.h>
+#include "../WProgram.h"
 #include <stdio.h>
 
 /* Table of CRCs of all 8-bit messages. */

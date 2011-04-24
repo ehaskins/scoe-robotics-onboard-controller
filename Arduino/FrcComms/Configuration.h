@@ -8,8 +8,8 @@
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
-#include <Udp.h>
-#include <WProgram.h>
+#include "../Udp.h"
+#include "../WProgram.h"
 
 static const unsigned int CONFIG_CURRENT_FORMAT_VERSION = 1;
 static const unsigned int CONFIG_DATA_SIZE = 22;

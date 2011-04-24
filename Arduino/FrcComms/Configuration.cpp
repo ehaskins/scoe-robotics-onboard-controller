@@ -8,7 +8,7 @@
 #include "Configuration.h"
 #include "ByteWriter.h"
 #include "ByteReader.h"
-#include <EEPROM.h>
+#include "../EEPROM.h"
 
 Configuration *Configuration::instance;
 Configuration * Configuration::getInstance(){
