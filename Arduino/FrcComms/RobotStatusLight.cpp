@@ -6,7 +6,8 @@
  */
 
 #include "RobotStatusLight.h"
-#include <WProgram.h>
+#include "../WProgram.h"
+
 /*
 Solid ON = Autonomous Enabled
 

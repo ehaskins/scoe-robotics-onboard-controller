@@ -10,8 +10,6 @@
 
 class IController {
 public:
-	virtual ~IController() = 0;
-
 	/**
 	 * Runs an iteration of a control loop, with the given setpoint, feedback, and timestep.
 	 */

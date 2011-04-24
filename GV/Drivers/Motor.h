@@ -8,36 +8,42 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
+#include <Servo.h>
 #include "IMotor.h"
 #include <WProgram.h>
+
+/**
 #include <wiring_private.h>
 #include <pins_arduino.h>
+
+// TODO - Determine the proper hardware PWM configuration!
+// Phase and Frequency Correct Mode
+// TOP = ICRn
+// 
 
 #define CASE_SETUP_TIMER_N_A(n)\
   case TIMER##n##A : \
     ICR##n = 20000; \
-    sbi(TCCR##n##A,CS##n##1); \
-    cbi(TCCR##n##A,CS##n##0); \
-    cbi(TCCR##n##A,CS##n##2); \
+    TCCR##n##A = 0; \
+    TCCR##n##B = (1<<CS##n##1)|(1<<WGM##n##3); \
     break;
 
 #define CASE_SETUP_TIMER_N_B(n)\
   case TIMER##n##B : \
     ICR##n = 20000; \
-    sbi(TCCR##n##B,CS##n##1); \
-    cbi(TCCR##n##B,CS##n##0); \
-    cbi(TCCR##n##B,CS##n##2); \
+    TCCR##n##A = 0; \
+    TCCR##n##B = (1<<CS##n##1)|(1<<WGM##n##3); \
     break;
     
 #define CASE_SETUP_TIMER_N_C(n)\
   case TIMER##n##C : \
     ICR##n = 20000; \
-    sbi(TCCR##n##C,CS##n##1); \
-    cbi(TCCR##n##C,CS##n##0); \
-    cbi(TCCR##n##C,CS##n##2); \
+    TCCR##n##A = 0; \
+    TCCR##n##B = (1<<CS##n##1)|(1<<WGM##n##3); \
     break;
     
 static void setupServoPWM(int pin) {
+  pinMode(pin, OUTPUT);
   switch (digitalPinToTimer(pin)) {
 #if defined(TCCR1A) && defined(COM1A1)
     CASE_SETUP_TIMER_N_A(1)
@@ -153,10 +159,12 @@ static void writeServoPWM(int pin, int ocrVal) {
       }
    };
 }
+*/
 
 class Motor : public IMotor {
 private:
   int m_pwmPort;
+  Servo m_servo;
   bool m_enabled;
 
   int m_idle;
@@ -183,7 +191,8 @@ public:
   void init(int port) {
     m_pwmPort = port;
     pinMode(m_pwmPort, OUTPUT);
-    setupServoPWM(port);
+//    setupServoPWM(port);
+    m_servo.attach(m_pwmPort, 1000, 2000);
     setSpeed(m_idle);
   }
 
@@ -232,7 +241,8 @@ public:
     }
 
     // Output the PWM signal.
-    writeServoPWM(m_pwmPort, output);
+//    writeServoPWM(m_pwmPort, output);
+    m_servo.write(output);
   }
 };
 
