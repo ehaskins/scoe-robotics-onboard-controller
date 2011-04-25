@@ -11,6 +11,7 @@
 #include <Servo.h>
 #include "IMotor.h"
 #include <WProgram.h>
+#include "..\UserConstants.h"
 
 // Declare the motor pulse width calculation function.
 long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth);
