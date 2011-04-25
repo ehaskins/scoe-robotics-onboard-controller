@@ -178,9 +178,9 @@ void UserRobot::teleopLoop(){
 	Joystick stick = comm->controlData->joysticks[0];
 
 	// Re-center the control axes.
-	int forward = stick.axis[LEFT_Y] - 128;
-	int strafe = stick.axis[LEFT_X] - 128;
-	int rotate = stick.axis[RIGHT_X] - 128;
+	int forward = stick.axis[LEFT_Y];
+	int strafe = stick.axis[LEFT_X];
+	int rotate = stick.axis[RIGHT_X];
 
 	// Drive the damn robot.
 	int controls[] = { forward, strafe, rotate };
@@ -189,7 +189,7 @@ void UserRobot::teleopLoop(){
 	// Launch the ball.
 #if USING_LAUNCHER
 
-	bool fire = (stick.axis[LR_ANALOG] > 192);
+	bool fire = (stick.axis[LR_ANALOG] > 64);
 
 	if (fire) {
 		launcher.driveLauncher(USER_LAUNCHER_FIRE_SPEED);
