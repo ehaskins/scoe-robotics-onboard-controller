@@ -232,7 +232,7 @@ public:
     // Constrain to the given bounds.
     speed = constrain(speed, m_minBound, m_maxBound);
 
-    // Convert from speed bounds to OCR value.
+    // Convert from speed bounds to microseconds value.
     long output = map(speed, m_minBound, m_maxBound, 1000, 2000);
 
     // Invert if necessary.
@@ -241,7 +241,6 @@ public:
     }
 
     // Output the PWM signal.
-//    writeServoPWM(m_pwmPort, output);
     m_servo.write(output);
   }
 };

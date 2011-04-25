@@ -46,7 +46,7 @@ const int FIXED_LOOP_FREQUENCY = 1;
 #define USER_MAX_SHIFT			15
 
 // The maximum motor speed. TODO Change this!
-#define USER_MOTOR_MAX_SPEED	150
+#define USER_MOTOR_MAX_SPEED	200
 #define USER_MOTOR_IDLE_SPEED	0
 
 // The launcher motor max speed.
@@ -73,5 +73,9 @@ const int FIXED_LOOP_FREQUENCY = 1;
 
 // Are we using PID controllers?
 #define USING_PID_CONTROLLERS	true
+
+// Function declarations for experimentally determined equations.
+int calcDriveMotorSpeed(long pulseWidth, long minWidth, long maxWidth);
+long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth);
 
 #endif
