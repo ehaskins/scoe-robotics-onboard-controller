@@ -13,8 +13,10 @@
 #include <WProgram.h>
 #include "..\UserConstants.h"
 
+#if USING_TRUE_SPEED
 // Declare the motor pulse width calculation function.
 long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth);
+#endif
 
 /**
 #include <wiring_private.h>
@@ -252,14 +254,6 @@ public:
     if (m_inverted) {
       output = 3000 - output;
     }
-
-#ifdef DEBUG
-    Serial.print("Motor on pin ");
-    Serial.print(m_pwmPort);
-    Serial.print(" at pulse width ");
-    Serial.print(output);
-    Serial.println(".");
-#endif
 
     // Output the PWM signal.
     m_servo.write(output);

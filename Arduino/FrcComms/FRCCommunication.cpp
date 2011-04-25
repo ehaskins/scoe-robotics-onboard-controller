@@ -95,8 +95,9 @@ bool FRCCommunication::newDataReady() {
 		char garbage[2048];
 		packetSize = packetSize <= 2048 ? packetSize : 2048;
 		socket.readPacket(garbage, packetSize, remoteIp, remotePort);
-		Serial.print("PacketSize:");
-		Serial.println(packetSize);
+//		Serial.print("PacketSize:");
+//		Serial.println(packetSize);
+		Serial.print('*');
 		droppedPacket = true;
 	}
 

@@ -86,29 +86,18 @@ void KiwiDrive::driveSystem(int* axisVector) {
 
 	// Apply the kiwi drive equations to the motor control values.
 	int rearValue = strafe + yaw;
-	int rightValue = (strafe / 2) + ((-forward * 216) / 250) + yaw;
-	int leftValue = (strafe / 2) + ((forward * 216) / 250) + yaw;
+	int rightValue = (-strafe / 2) + ((forward * 216) / 250) + yaw;
+	int leftValue = (-strafe / 2) + ((-forward * 216) / 250) + yaw;
 
 	// Clamp the motor values.
-	rearValue = constrain(rearValue, -255, 255);
-	rightValue = constrain(rightValue, -300, 300);
-	leftValue = constrain(leftValue, -300, 300);
+	rearValue = constrain(rearValue, -128, 127);
+	rightValue = constrain(rightValue, -128, 127);
+	leftValue = constrain(leftValue, -128, 127);
 
 	// Convert and map the values to feet/second speeds.
-	rearValue = map(rearValue, -300, 300, getMotorLowerBound(KIWI_REAR), getMotorUpperBound(KIWI_REAR));
-	rightValue = map(rightValue, -300, 300, getMotorLowerBound(KIWI_RIGHT), getMotorUpperBound(KIWI_RIGHT));
-	leftValue = map(leftValue, -300, 300, getMotorLowerBound(KIWI_LEFT), getMotorUpperBound(KIWI_LEFT));
-
-#if DEBUG
-	Serial.println("Kiwi Drive: ");
-	Serial.print("Rear: ");
-	Serial.print(rearValue);
-	Serial.print("in/s, Right: ");
-	Serial.print(rightValue);
-	Serial.print("in/s, Left: ");
-	Serial.print(leftValue);
-	Serial.println("in/s.");
-#endif
+	rearValue = map(rearValue, -128, 127, getMotorLowerBound(KIWI_REAR), getMotorUpperBound(KIWI_REAR));
+	rightValue = map(rightValue, -128, 127, getMotorLowerBound(KIWI_RIGHT), getMotorUpperBound(KIWI_RIGHT));
+	leftValue = map(leftValue, -128, 127, getMotorLowerBound(KIWI_LEFT), getMotorUpperBound(KIWI_LEFT));
 
 	// Output the values to the motors.
 	driveMotor(KIWI_LEFT, leftValue);

@@ -6,9 +6,9 @@
  */
 
 #include "Motor.h"
-#include <math.h>
 #include "../UserConstants.h"
 
+#if USING_TRUE_SPEED
 long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth) {
 	// Get our data point.
 	float x = (float)(abs(speed));
@@ -36,3 +36,4 @@ long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth) {
 	// Return.
 	return pulseWidth;
 }
+#endif
