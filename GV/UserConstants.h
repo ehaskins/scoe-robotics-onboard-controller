@@ -14,6 +14,9 @@ const int FIXED_LOOP_FREQUENCY = 1;
 // Debug mode.
 #define DEBUG					false
 
+// Victor motor calibration.
+#define CALIBRATION_MODE		true
+
 // Are we using PID controllers?
 #define USING_PID_CONTROLLERS	false
 
@@ -44,7 +47,7 @@ const int FIXED_LOOP_FREQUENCY = 1;
 
 // Whether or not any of the drive directions are inverted.
 #define USER_INVERT_FORWARD		false
-#define USER_INVERT_STRAFE		false
+#define USER_INVERT_STRAFE		true
 #define USER_INVERT_YAW			false
 
 // Whether or not any of the motor lines are inverted.

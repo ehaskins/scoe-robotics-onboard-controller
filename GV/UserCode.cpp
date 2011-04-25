@@ -8,7 +8,7 @@
 #include "UserCode.h"
 #include <WProgram.h>
 #include <FrcComms\FRCCommunication.h>
-#include <Servo.h>
+//#include <Servo.h>
 #include "Utils.h"
 #include "UserConstants.h"
 
@@ -21,6 +21,7 @@ static LimitMotor leftLimitMotor;
 static LimitMotor rightLimitMotor;
 static LimitMotor rearLimitMotor;
 
+#if USING_PID_CONTROLLER
 static PIDMotor leftPIDMotor;
 static PIDMotor rightPIDMotor;
 static PIDMotor rearPIDMotor;
@@ -34,10 +35,12 @@ static Encoder rearEncoder;
 static SpeedSensor leftSpeedSensor;
 static SpeedSensor rightSpeedSensor;
 static SpeedSensor rearSpeedSensor;
+#endif
 
 // Drive system.
 static KiwiDrive kiwidrive;
 
+#if USING_LAUNCHER
 // Launcher motors and sensors.
 static Motor launchMotor;
 static Motor intakeMotor;
@@ -46,6 +49,7 @@ static DigitalInput intakeSensor;
 
 // Launch system.
 static BallLauncher launcher;
+#endif
 
 /*
  * Guaranteed to be called after the following have been initialized:
@@ -62,6 +66,8 @@ void UserRobot::userInit(void) {
 	disabledInitComplete = false;
 
 	// Initialize the robot parts.
+	Serial.println("Initializing robot parts...");
+	Serial.println(millis());
 
 	// 137"/s max speed, approx., with gearbox and CIM motors.
 	leftMotor.setBounds(-USER_MOTOR_MAX_SPEED, USER_MOTOR_MAX_SPEED);
@@ -131,6 +137,9 @@ void UserRobot::userInit(void) {
 
 	launcher.init((IDigitalInput*)&loadSensor, (IDigitalInput*)&intakeSensor, (IMotor*)&launchMotor, (IMotor*)&intakeMotor);
 #endif
+
+	Serial.println("Initialization complete.");
+	Serial.println(millis());
 }
 
 /*
@@ -175,16 +184,15 @@ enum XboxJoysticks {
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void UserRobot::teleopLoop(){
-	long milliStart = millis();
+void UserRobot::teleopLoop() {
 
 	// Get the control stick.
 	Joystick stick = comm->controlData->joysticks[0];
 
 	// Re-center the control axes.
-	int forward = stick.axis[LEFT_Y];
-	int strafe = stick.axis[LEFT_X];
-	int rotate = stick.axis[RIGHT_X];
+	int forward = stick.axis[LEFT_Y];	// 1
+	int strafe = stick.axis[LEFT_X];	// 2
+	int rotate = stick.axis[RIGHT_X];	// 4
 
 	// Drive the damn robot.
 	int controls[] = { forward, strafe, rotate };
@@ -209,9 +217,6 @@ void UserRobot::teleopLoop(){
 		launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
 	}
 #endif
-
-	Serial.print("Milliseconds: ");
-	Serial.println(millis() - milliStart);
 }
 
 /*
@@ -232,16 +237,28 @@ void UserRobot::disabledLoop(){
 
 }
 
+bool goingUp = false;
+int autoSpeed = 0;
+
 /*
  * Perform any initialization needed before autonomous mode.
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
 void UserRobot::autonomousInit(){
+#if CALIBRATION_MODE
+	setOutputsEnabled(true);
+
+	leftLimitMotor.setSpeed(leftLimitMotor.getIdle());
+	rightLimitMotor.setSpeed(rightLimitMotor.getIdle());
+	rearLimitMotor.setSpeed(rearLimitMotor.getIdle());
+#else
 	setOutputsEnabled(false);
+#endif
 }
 
 
+int autonomousCounter;
 /*
  * Process autonomous control data here.
  * This code is called every time new control data is received.
@@ -249,7 +266,23 @@ void UserRobot::autonomousInit(){
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void UserRobot::autonomousLoop(){
-
+	autonomousCounter++;
+#if CALIBRATION_MODE
+	if (goingUp) {
+		autoSpeed++;
+		if (autoSpeed == USER_MOTOR_MAX_SPEED) {
+			goingUp = false;
+		}
+	} else {
+		autoSpeed--;
+		if (autoSpeed == -USER_MOTOR_MAX_SPEED) {
+			goingUp = true;
+		}
+	}
+	leftLimitMotor.setSpeed(autoSpeed);
+	rightLimitMotor.setSpeed(autoSpeed);
+	rearLimitMotor.setSpeed(autoSpeed);
+#endif
 }
 
 /*
