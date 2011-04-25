@@ -12,6 +12,9 @@
 #include "IMotor.h"
 #include <WProgram.h>
 
+// Declare the motor pulse width calculation function.
+long calcDriveMotorPulseWidth(int speed, long minWidth, long maxWidth);
+
 /**
 #include <wiring_private.h>
 #include <pins_arduino.h>
@@ -233,7 +236,11 @@ public:
     speed = constrain(speed, m_minBound, m_maxBound);
 
     // Convert from speed bounds to microseconds value.
+#if USING_TRUE_SPEED
+    long output = calcDriveMotorPulseWidth(speed, 1000, 2000);
+#else
     long output = map(speed, m_minBound, m_maxBound, 1000, 2000);
+#endif
 
     // Invert if necessary.
     if (m_inverted) {

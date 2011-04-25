@@ -112,6 +112,7 @@ void UserRobot::userInit(void) {
 	kiwidrive.invertStrafe(USER_INVERT_STRAFE);
 	kiwidrive.invertYaw(USER_INVERT_YAW);
 
+#if USING_LAUNCHER
 	// Launcher stuff.
 	launchMotor.setBounds(-USER_LAUNCHER_MAX_SPEED, USER_LAUNCHER_MAX_SPEED);
 	launchMotor.setIdle(USER_LAUNCHER_IDLE_SPEED);
@@ -127,6 +128,7 @@ void UserRobot::userInit(void) {
 	intakeSensor.init(PIN_INTAKE_SWITCH);
 
 	launcher.init((IDigitalInput*)&loadSensor, (IDigitalInput*)&intakeSensor, (IMotor*)&launchMotor, (IMotor*)&intakeMotor);
+#endif
 }
 
 /*
@@ -135,11 +137,15 @@ void UserRobot::userInit(void) {
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
 		kiwidrive.setEnabled(true);
+#if USING_LAUNCHER
 		launcher.setEnabled(true);
+#endif
 		attached = true;
 	} else if (!enabled && attached) {
 		kiwidrive.setEnabled(false);
+#if USING_LAUNCHER
 		launcher.setEnabled(false);
+#endif
 		attached = false;
 	}
 }
@@ -176,13 +182,15 @@ void UserRobot::teleopLoop(){
 	int strafe = stick.axis[LEFT_X] - 128;
 	int rotate = stick.axis[RIGHT_X] - 128;
 
-	bool fire = (stick.axis[LR_ANALOG] > 192);
-
 	// Drive the damn robot.
 	int controls[] = { forward, strafe, rotate };
 	kiwidrive.driveSystem(controls);
 
 	// Launch the ball.
+#if USING_LAUNCHER
+
+	bool fire = (stick.axis[LR_ANALOG] > 192);
+
 	if (fire) {
 		launcher.driveLauncher(USER_LAUNCHER_FIRE_SPEED);
 	} else {
@@ -196,6 +204,7 @@ void UserRobot::teleopLoop(){
 	} else {
 		launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
 	}
+#endif
 }
 
 /*
