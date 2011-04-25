@@ -88,8 +88,8 @@ void UserRobot::teleopLoop(){
 	int tiltVal = stick.axis[4];
 
 	int rearValue = x + z;
-	int rightValue = (-x / 2) + ((y * 216) / 250) + z;
-	int leftValue = (-x / 2) + ((-y * 216) / 250) + z;
+	int rightValue = (-x / 2) + ((-y * 216) / 250) + z;
+	int leftValue = (-x / 2) + ((y * 216) / 250) + z;
 
 	rightValue = limit(rightValue, -128, 127);
 	leftValue = limit(leftValue, -128, 127);

@@ -86,8 +86,8 @@ void KiwiDrive::driveSystem(int* axisVector) {
 
 	// Apply the kiwi drive equations to the motor control values.
 	int rearValue = strafe + yaw;
-	int rightValue = (-strafe / 2) + (int)(forward * 0.866f) + yaw;
-	int leftValue = (-strafe / 2) + (int)(-forward * 0.866f) + yaw;
+	int rightValue = (strafe / 2) + ((-forward * 216) / 250) + yaw;
+	int leftValue = (strafe / 2) + ((forward * 216) / 250) + yaw;
 
 	// Clamp the motor values.
 	rearValue = constrain(rearValue, -255, 255);
