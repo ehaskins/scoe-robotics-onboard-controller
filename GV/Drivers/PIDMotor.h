@@ -12,6 +12,7 @@
 #include "IMotor.h"
 #include "ISpeedSensor.h"
 #include "../Util/PIDController.h"
+#include "../UserConstants.h"
 #include <string.h>
 
 class PIDMotor : public IMotor {
