@@ -39,18 +39,16 @@ void UserRobot::userInit(void) {
  */
 void UserRobot::setOutputsEnabled(bool enabled) {
 	if (enabled && !attached) {
-		nw.attach(8);
-		ne.attach(9);
-		sw.attach(10);
-		se.attach(11);
+		left.attach(5);
+		right.attach(6);
+		rear.attach(7);
 		pan.attach(12);
 		tilt.attach(13);
 		attached = true;
 	} else if (!enabled && attached) {
-		nw.detach();
-		ne.detach();
-		sw.detach();
-		se.detach();
+		left.detach();
+		right.detach();
+		rear.detach();
 		pan.detach();
 		tilt.detach();
 		attached = false;
@@ -89,17 +87,19 @@ void UserRobot::teleopLoop(){
 		position = -128;
 	int tiltVal = stick.axis[4];
 
-	int nwVal = y + z + x;
-	int neVal = y - z - x;
-	int swVal = y + z - x;
-	int seVal = y - z + x;
-/*
-	nw.write(limit(nwVal, -128, 127));
-	ne.write(limit(neVal, -128, 127));
-	sw.write(limit(swVal, -128, 127));
-	se.write(limit(seVal, -128, 127));
-	pan.write(panVal);
-	tilt.write(tiltVal);*/
+	int rearValue = x + z;
+	int rightValue = (-x / 2) + ((y * 216) / 250) + z;
+	int leftValue = (-x / 2) + ((-y * 216) / 250) + z;
+
+	rightValue = limit(rightValue, -128, 127);
+	leftValue = limit(leftValue, -128, 127);
+	rearValue = limit(rearValue, -128, 127);
+
+	right.writeMicroseconds(map(rightValue, -128, 127, 1000, 2000));
+	left.writeMicroseconds(map(leftValue, -128, 127, 1000, 2000));
+	rear.writeMicroseconds(map(rearValue, -128, 127, 1000, 2000));
+	//pan.write(panVal);
+	//tilt.write(tiltVal);
 	teleopCounter++;
 }
 
@@ -184,7 +184,7 @@ void UserRobot::commLoop(void) {
 	Mode mode = comm->controlData->mode;
 	//Serial.println((int)mode.data.data);
 	if (mode.getEnabled()) {
-		//setOutputsEnabled(true);
+		setOutputsEnabled(true);
 		if (mode.getAutonomous()) {
 			if (!autoInitComplete){
 				autonomousInit();
