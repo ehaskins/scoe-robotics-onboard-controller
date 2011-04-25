@@ -247,6 +247,14 @@ public:
       output = 3000 - output;
     }
 
+#ifdef DEBUG
+    Serial.print("Motor on pin ");
+    Serial.print(m_pwmPort);
+    Serial.print(" at pulse width ");
+    Serial.print(output);
+    Serial.println(".");
+#endif
+
     // Output the PWM signal.
     m_servo.write(output);
   }

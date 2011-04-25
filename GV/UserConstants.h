@@ -11,6 +11,9 @@
 
 const int FIXED_LOOP_FREQUENCY = 1;
 
+// Debug mode.
+#define DEBUG					true
+
 // Are we using PID controllers?
 #define USING_PID_CONTROLLERS	false
 
