@@ -177,7 +177,11 @@ private:
   bool m_inverted;
 
 public:
-  Motor() : m_pwmPort(NO_PORT), m_enabled(false), m_idle(0), m_minBound(-128), m_maxBound(127), m_inverted(false) {}
+  Motor() : m_pwmPort(NO_PORT), m_enabled(false), m_idle(0), m_minBound(-128), m_maxBound(127), m_inverted(false) {
+	  if (m_servo.attached()) {
+		  m_servo.detach();
+	  }
+  }
 
   void setIdle(int idle) {
     m_idle = idle;
@@ -194,14 +198,15 @@ public:
   void init(int port) {
     m_pwmPort = port;
     pinMode(m_pwmPort, OUTPUT);
-//    setupServoPWM(port);
-    m_servo.attach(m_pwmPort, 1000, 2000);
-    setSpeed(m_idle);
   }
 
   void setEnabled(bool enable) {
-    setSpeed(m_idle);
     m_enabled = enable;
+    if (!enable && m_servo.attached()) {
+    	m_servo.detach();
+    } else if (enable && !m_servo.attached()){
+    	m_servo.attach(m_pwmPort, 1000, 2000);
+    }
   }
 
   bool isEnabled() const {
