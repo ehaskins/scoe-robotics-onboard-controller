@@ -31,10 +31,9 @@ private:
 	bool attached;
 	Servo pan;
 	Servo tilt;
-	Servo nw;
-	Servo ne;
-	Servo sw;
-	Servo se;
+	Servo right;
+	Servo left;
+	Servo rear;
 
 	Configuration *config;
 	FRCCommunication *comm;

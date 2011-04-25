@@ -14,7 +14,7 @@ const int NUM_AXES = 6;
 
 struct Joystick{
 	void parse(unsigned char[], int*);
-	char axis[NUM_AXES];
+	signed char axis[NUM_AXES];
 	BitField16 buttons;
 };
 
