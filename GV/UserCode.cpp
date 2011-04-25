@@ -54,6 +54,8 @@ static BallLauncher launcher;
  * Place any one time robot specific initialization code here.
  */
 void UserRobot::userInit(void) {
+
+	comm = FRCCommunication::getInstance();
 	//Initialize user code, robot sensors, etc. here.
 	autoInitComplete = false;
 	teleInitComplete = false;
@@ -174,6 +176,8 @@ enum XboxJoysticks {
  * actual rate will be less than 50hz, and not guaranteed.
  */
 void UserRobot::teleopLoop(){
+	long milliStart = millis();
+
 	// Get the control stick.
 	Joystick stick = comm->controlData->joysticks[0];
 
@@ -205,6 +209,9 @@ void UserRobot::teleopLoop(){
 		launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
 	}
 #endif
+
+	Serial.print("Milliseconds: ");
+	Serial.println(millis() - milliStart);
 }
 
 /*

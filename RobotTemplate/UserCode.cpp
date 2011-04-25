@@ -30,6 +30,7 @@ void UserRobot::userInit(void) {
 	teleInitComplete = false;
 	disabledInitComplete = false;
 
+	comm = FRCCommunication::getInstance();
 	Serial.println("User init complete.");
 }
 
@@ -76,6 +77,12 @@ void UserRobot::teleopLoop(){
 	int y = stick.axis[1];
 	int x = stick.axis[2];
 	int z = stick.axis[0];
+	if (teleopCounter % 25 == 0)
+	{
+		Serial.println(z);
+		Serial.println(y);
+		Serial.println(x);
+	}
 	int panVal = position; //= stick.axis[3];
 	position += 1;
 	if (position > 127)
