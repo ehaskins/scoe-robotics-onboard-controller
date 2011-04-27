@@ -331,7 +331,7 @@ int Servo::readMicroseconds()
   return pulsewidth;   
 }
 
-bool Servo::attached()
+bool Servo::attached() const
 {
   return servos[this->servoIndex].Pin.isActive ;
 }

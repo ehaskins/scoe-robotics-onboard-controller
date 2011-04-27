@@ -14,6 +14,7 @@
 
 #if USING_LAUNCHER
 // Manipulator stuff
+#include "ServoMotor.h"
 #include "DigitalInput.h"
 #include "BallLauncher.h"
 #endif

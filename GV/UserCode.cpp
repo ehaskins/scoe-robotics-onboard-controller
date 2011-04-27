@@ -44,6 +44,8 @@ static KiwiDrive kiwidrive;
 // Launcher motors and sensors.
 static Motor launchMotor;
 static Motor intakeMotor;
+static ServoMotor launchServo;
+static ServoMotor intakeServo;
 static DigitalInput loadSensor;
 static DigitalInput intakeSensor;
 
@@ -67,7 +69,6 @@ void UserRobot::userInit(void) {
 
 	// Initialize the robot parts.
 	Serial.println("Initializing robot parts...");
-	Serial.println(millis());
 
 	// 137"/s max speed, approx., with gearbox and CIM motors.
 	leftMotor.setBounds(-USER_MOTOR_MAX_SPEED, USER_MOTOR_MAX_SPEED);
@@ -136,10 +137,11 @@ void UserRobot::userInit(void) {
 	intakeSensor.init(PIN_INTAKE_SWITCH);
 
 	launcher.init((IDigitalInput*)&loadSensor, (IDigitalInput*)&intakeSensor, (IMotor*)&launchMotor, (IMotor*)&intakeMotor);
+	launcher.setIntakeServoPositions(USER_INTAKE_SERVO_OPEN, USER_INTAKE_SERVO_CLOSED);
+	launcher.setLaunchServoPositions(USER_LAUNCH_SERVO_OPEN, USER_LAUNCH_SERVO_CLOSED);
 #endif
 
 	Serial.println("Initialization complete.");
-	Serial.println(millis());
 }
 
 /*
@@ -203,19 +205,20 @@ void UserRobot::teleopLoop() {
 
 	bool fire = (stick.axis[LR_ANALOG] > 64);
 
-	if (fire) {
-		launcher.driveLauncher(USER_LAUNCHER_FIRE_SPEED);
+	if (launcher.isLoaded() && fire) {
+		// If the launcher is loaded and the trigger is pressed, fire.
+		launcher.openLauncher(true);
 	} else {
-		launcher.driveLauncher(USER_LAUNCHER_IDLE_SPEED);
+		launcher.openLauncher(false);
 	}
 
-	// Activate the intake belt.
-	if ((launcher.isIntakePrimed() || fire) && !launcher.isLoaded()) {
-		// Activate the intake belt.
-		launcher.driveIntake(USER_INTAKE_RUN_SPEED);
-	} else {
-		launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
-	}
+	// If the trigger is pressed, turn on the launcher motor.
+	launcher.driveLauncher(fire ? USER_LAUNCHER_FIRE_SPEED : USER_LAUNCHER_IDLE_SPEED);
+
+	// If the fire button is pressed, the launcher isn't loaded, and there's a ball in the intake, open the intake.
+	launcher.openIntake(fire && !launcher.isLoaded() && !launcher.isIntakePrimed());
+	// If the fire button is pressed and the launcher isn't loaded, run the intake.
+	launcher.driveIntake(USER_INTAKE_IDLE_SPEED);
 #endif
 }
 

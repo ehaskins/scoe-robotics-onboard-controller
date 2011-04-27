@@ -204,16 +204,15 @@ public:
   }
 
   void setEnabled(bool enable) {
-    m_enabled = enable;
     if (!enable && m_servo.attached()) {
-    	m_servo.detach();
+      m_servo.detach();
     } else if (enable && !m_servo.attached()){
-    	m_servo.attach(m_pwmPort, 1000, 2000);
+      m_servo.attach(m_pwmPort, 1000, 2000);
     }
   }
 
   bool isEnabled() const {
-    return m_enabled;
+	return m_servo.attached();
   }
 
   bool setBounds(int min, int max) {

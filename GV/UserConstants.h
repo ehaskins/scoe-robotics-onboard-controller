@@ -78,6 +78,12 @@ const int FIXED_LOOP_FREQUENCY = 1;
 // TODO Test this!
 #define USER_INTAKE_RUN_SPEED		25
 
+// TODO Determine these!
+#define USER_LAUNCH_SERVO_CLOSED	0
+#define USER_LAUNCH_SERVO_OPEN		127
+#define USER_INTAKE_SERVO_CLOSED	0
+#define USER_INTAKE_SERVO_OPEN		127
+
 // The pulses per revolution of the encoders.
 #define USER_LEFT_ENCODER_PPR		2048
 #define USER_RIGHT_ENCODER_PPR		2048
