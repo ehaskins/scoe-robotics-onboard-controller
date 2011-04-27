@@ -203,6 +203,7 @@ void UserRobot::teleopLoop() {
 	// Launch the ball.
 #if USING_LAUNCHER
 
+	// TODO Update launcher code!!!
 	bool fire = (stick.axis[LR_ANALOG] > 64);
 
 	if (launcher.isLoaded() && fire) {
