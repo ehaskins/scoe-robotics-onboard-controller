@@ -42,15 +42,17 @@ void UserRobot::setOutputsEnabled(bool enabled) {
 		left.attach(5);
 		right.attach(6);
 		rear.attach(7);
-		pan.attach(12);
-		tilt.attach(13);
+		lift.attach(12);
+		shooter.attach(8);
+		gate.attach(11);
 		attached = true;
 	} else if (!enabled && attached) {
 		left.detach();
 		right.detach();
 		rear.detach();
-		pan.detach();
-		tilt.detach();
+		lift.detach();
+		shooter.detach();
+		gate.detach();
 		attached = false;
 	}
 }
@@ -63,6 +65,10 @@ void UserRobot::setOutputsEnabled(bool enabled) {
 void UserRobot::teleopInit(){
 	Serial.println("Entering tele-op");
 }
+
+
+//Control scale factor. Must be fraction.
+#define SCALE 1/2
 /*
  * Process teleop control data here.
  * This code is called every time new control data is received.
@@ -75,6 +81,27 @@ void UserRobot::teleopLoop(){
 	int y = stick.axis[1];
 	int x = stick.axis[2];
 	int z = stick.axis[0];
+
+	y = y * SCALE;
+	x = x * SCALE;
+	z = z * SCALE;
+
+	int shooterValue = stick.axis[3];
+
+	bool liftInput = stick.buttons.getBit(0);
+	if (liftInput == true && liftInput != lastLiftInput)
+		liftState = !liftState;
+	lastLiftInput = liftInput;
+	int liftValue = liftState ? 128 : 0;
+
+	bool gateInput = stick.buttons.getBit(1);
+	if (gateInput == true && gateInput != lastGateInput)
+		gateState = !gateState;
+	lastGateInput = gateInput;
+	int gateValue = gateState ? 0 : 128;
+
+
+	liftValue = stick.axis[5];
 	if (teleopCounter % 25 == 0)
 	{
 		Serial.println(z);
@@ -98,8 +125,9 @@ void UserRobot::teleopLoop(){
 	right.writeMicroseconds(map(rightValue, -128, 127, 1000, 2000));
 	left.writeMicroseconds(map(leftValue, -128, 127, 1000, 2000));
 	rear.writeMicroseconds(map(rearValue, -128, 127, 1000, 2000));
-	//pan.write(panVal);
-	//tilt.write(tiltVal);
+	shooter.writeMicroseconds(map(shooterValue, -128, 127, 1000, 2000));
+	lift.writeMicroseconds(map(liftValue, -128, 127, 1000, 2000));
+	gate.writeMicroseconds(map(gateValue, -128, 127, 1000, 2000));
 	teleopCounter++;
 }
 
