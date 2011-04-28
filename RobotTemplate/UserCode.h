@@ -28,12 +28,19 @@ private:
 	bool teleInitComplete;
 	bool disabledInitComplete;
 
+	bool liftState;
+	bool lastLiftInput;
+	bool lastGateInput;
+	bool gateState;
 	bool attached;
 	Servo pan;
 	Servo tilt;
 	Servo right;
 	Servo left;
 	Servo rear;
+	Servo lift;
+	Servo shooter;
+	Servo gate;
 
 	Configuration *config;
 	FRCCommunication *comm;
