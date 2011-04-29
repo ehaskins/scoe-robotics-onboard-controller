@@ -11,25 +11,22 @@
 #include "ControlData.h"
 #include "StatusData.h"
 #include "RobotStatusLight.h"
-#include "../Udp.h"
 #include "Configuration.h"
 
 const int PACKET_LOSS_TIMEOUT = 1000;
 
-struct FRCCommunication{
+class FRCCommunication{
 private:
 	int counter;
-	static FRCCommunication *instance;
-	UdpClass socket;
+
+	virtual bool dataAvailable();
+	virtual void receiveData(unsigned char buffer[]);
+	virtual void transmitData(unsigned char buffer[]);
+protected:
 	Configuration *config;
 public:
-	static FRCCommunication * getInstance(void);
-	unsigned char mac[6];
-	unsigned char ip[4];
-	unsigned char subnet[4];
-	unsigned char gateway[4];
 
-	void init();
+	virtual void init();
 	bool newDataReady(void);
 	void sendData(void);
 

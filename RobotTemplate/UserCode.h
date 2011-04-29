@@ -11,7 +11,7 @@
 #include <FrcComms\Configuration.h>
 #include <FrcComms\FRCCommunication.h>
 #include "Drivers/Drivers.h"
-
+#include <FrcComms\FrcSerialCommunication.h>
 //Declared and initialized in main.
 class UserRobot
 {
@@ -43,7 +43,7 @@ private:
 	Servo gate;
 
 	Configuration *config;
-	FRCCommunication *comm;
+	FrcSerialCommunication *comm;
 public:
 	void fastLoop(void);
 	void commLoop(void);

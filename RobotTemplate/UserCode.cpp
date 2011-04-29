@@ -30,7 +30,7 @@ void UserRobot::userInit(void) {
 	teleInitComplete = false;
 	disabledInitComplete = false;
 
-	comm = FRCCommunication::getInstance();
+	comm = FrcSerialCommunication::getInstance();
 	Serial.println("User init complete.");
 }
 

@@ -5,7 +5,7 @@
 #include <FrcComms\Configuration.h>
 #include <Ethernet.h>
 #include <FrcComms\CRC32.h>
-
+#include <FrcComms\FrcNetworkCommunication.h>
 //const int interval = 250; //Milliseconds
 Configuration *config;
 FRCCommunication *comm;
@@ -28,7 +28,7 @@ int main() {
 void setup() {
 	init();
 	config = Configuration::getInstance();
-	comm = FRCCommunication::getInstance();
+	comm = FrcNetworkCommunication::getInstance();
 	Serial.begin(9600);
 
 	unsigned char buf[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
