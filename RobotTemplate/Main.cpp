@@ -5,11 +5,11 @@
 #include <FrcComms\Configuration.h>
 #include <Ethernet.h>
 #include <FrcComms\CRC32.h>
-#include <FrcComms\FrcSerialCommunication.h>
-
+//#include <FrcComms\FrcSerialCommunication.h>
+#include <FrcComms\FrcNetworkCommunication.h>
 //const int interval = 250; //Milliseconds
 Configuration *config;
-FrcSerialCommunication *comm;
+COMMTYPE *comm;
 UserRobot robot;
 
 int main() {
@@ -29,8 +29,8 @@ int main() {
 void setup() {
 	init();
 	config = Configuration::getInstance();
-	comm = FrcSerialCommunication::getInstance();
-	Serial.begin(115200);
+	comm = COMMTYPE::getInstance();
+	Serial.begin(9600);
 
 	unsigned char buf[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 	Serial.println(crc(buf, 10));
