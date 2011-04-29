@@ -8,6 +8,8 @@
 #include "UserCode.h"
 #include <WProgram.h>
 #include <FrcComms\FRCCommunication.h>
+#include <FrcComms\FrcSerialCommunication.h>
+#include <FrcComms\FrcNetworkCommunication.h>
 #include <Servo.h>
 #include "Utils.h"
 
@@ -30,7 +32,7 @@ void UserRobot::userInit(void) {
 	teleInitComplete = false;
 	disabledInitComplete = false;
 
-	comm = FrcSerialCommunication::getInstance();
+	comm = COMMTYPE::getInstance();
 	Serial.println("User init complete.");
 }
 

@@ -10,6 +10,7 @@
 
 #include "FRCCommunication.h"
 
+#define CommSerial Serial3
 class FrcSerialCommunication : public FRCCommunication {
 private:
 	unsigned int headerPosition;
