@@ -11,7 +11,6 @@
 #include <Servo.h>
 #include "Utils.h"
 
-
 /*
  * Guaranteed to be called after the following have been initialized:
  * Ethernet, configuration, serial, and FRCComms.
@@ -62,33 +61,33 @@ void UserRobot::setOutputsEnabled(bool enabled) {
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void UserRobot::teleopInit(){
+void UserRobot::teleopInit() {
 	Serial.println("Entering tele-op");
 }
 
-
 //Control scale factor. Must be fraction.
-#define SCALE 1/2
+
 /*
  * Process teleop control data here.
  * This code is called every time new control data is received.
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void UserRobot::teleopLoop(){
+void UserRobot::teleopLoop() {
 	Joystick stick = comm->controlData->joysticks[0];
 
 	int y = stick.axis[1];
 	int x = stick.axis[2];
 	int z = stick.axis[0];
 
-	y = y * SCALE;
-	x = x * SCALE;
-	z = z * SCALE;
-
+	/*y = y * 1 / 4;
+	 x = x * 1 / 4;
+	 z = z * 15 / 100;*/
+	z = z / 2;
 	int shooterValue = stick.axis[3];
 
 	bool liftInput = stick.buttons.getBit(0);
+
 	if (liftInput == true && liftInput != lastLiftInput)
 		liftState = !liftState;
 	lastLiftInput = liftInput;
@@ -100,10 +99,8 @@ void UserRobot::teleopLoop(){
 	lastGateInput = gateInput;
 	int gateValue = gateState ? 0 : 128;
 
-
 	liftValue = stick.axis[5];
-	if (teleopCounter % 25 == 0)
-	{
+	if (teleopCounter % 25 == 0) {
 		Serial.println(z);
 		Serial.println(y);
 		Serial.println(x);
@@ -131,14 +128,12 @@ void UserRobot::teleopLoop(){
 	teleopCounter++;
 }
 
-
-
 /*
  * Perform any initialization needed before disabled mode.
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void UserRobot::disabledInit(){
+void UserRobot::disabledInit() {
 	Serial.println("Entering disabled");
 }
 /*
@@ -147,7 +142,7 @@ void UserRobot::disabledInit(){
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void UserRobot::disabledLoop(){
+void UserRobot::disabledLoop() {
 
 }
 
@@ -156,10 +151,9 @@ void UserRobot::disabledLoop(){
  *
  * Guaranteed to be called prior to teleopInit's first call after first boot or autoInit or disabledInit have been called.
  */
-void UserRobot::autonomousInit(){
+void UserRobot::autonomousInit() {
 	Serial.println("Entering autonomous");
 }
-
 
 /*
  * Process autonomous control data here.
@@ -167,7 +161,7 @@ void UserRobot::autonomousInit(){
  * In theory this will be called at 50hz, but due to network losses, etc. the
  * actual rate will be less than 50hz, and not guaranteed.
  */
-void UserRobot::autonomousLoop(){
+void UserRobot::autonomousLoop() {
 }
 
 /*
@@ -198,8 +192,6 @@ void UserRobot::fastLoop(void) {
 	}
 }
 
-
-
 /*
  * Processes control data here, and calls the appropriate init and/or loop functions.
  * This code is called every time new control data is received.
@@ -214,7 +206,7 @@ void UserRobot::commLoop(void) {
 	if (mode.getEnabled()) {
 		setOutputsEnabled(true);
 		if (mode.getAutonomous()) {
-			if (!autoInitComplete){
+			if (!autoInitComplete) {
 				autonomousInit();
 				autoInitComplete = true;
 				teleInitComplete = false;
@@ -222,7 +214,7 @@ void UserRobot::commLoop(void) {
 			}
 			autonomousLoop();
 		} else {
-			if (!teleInitComplete){
+			if (!teleInitComplete) {
 				teleopInit();
 				autoInitComplete = false;
 				teleInitComplete = true;
@@ -230,10 +222,9 @@ void UserRobot::commLoop(void) {
 			}
 			teleopLoop();
 		}
-	}
-	else{
+	} else {
 		setOutputsEnabled(false);
-		if (!disabledInitComplete){
+		if (!disabledInitComplete) {
 			disabledInit();
 			autoInitComplete = false;
 			teleInitComplete = false;
